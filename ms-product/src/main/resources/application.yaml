@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: ms-product
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: ${ORACLE_DRIVER}
+    url: ${ORACLE_DB_URL}
+    username: ${ORACLE_DB_USER}
+    password: ${ORACLE_DB_PASS}
+    hikari:
+      pool-name: OrderHikariPool
+      connection-timeout: 30000
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 60000
+      max-lifetime: 1800000
+      auto-commit: false
+      connection-test-query: SELECT 1 FROM DUAL
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        order_updates: true
+        order_inserts: true
+        format_sql: false
+        jdbc:
+          batch_size: 50
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    properties:
+      security.protocol: SASL_PLAINTEXT
+      sasl.mechanism: PLAIN
+      sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username=${KAFKA_USERNAME} password=${KAFKA_PASSWORD};
