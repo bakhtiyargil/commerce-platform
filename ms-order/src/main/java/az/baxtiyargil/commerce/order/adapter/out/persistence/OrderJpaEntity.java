@@ -21,6 +21,7 @@ import org.hibernate.Hibernate;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import static az.baxtiyargil.commerce.order.adapter.out.persistence.PersistenceConstants.SERIAL_VERSION_UID;
@@ -63,7 +64,7 @@ public class OrderJpaEntity implements Serializable {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<OrderItemJpaEntity> orderItems;
+    private List<OrderItemJpaEntity> orderItems = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {

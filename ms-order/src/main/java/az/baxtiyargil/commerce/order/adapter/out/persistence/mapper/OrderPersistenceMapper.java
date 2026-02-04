@@ -20,7 +20,14 @@ import java.util.stream.IntStream;
 )
 public interface OrderPersistenceMapper {
 
-    Order toOrder(OrderJpaEntity orderJpaEntity);
+    @Mapping(target = "customerId", source = "customerId")
+    @Mapping(target = "storeId", source = "storeId")
+    @Mapping(target = "items", source = "orderItems")
+    Order toOrder(OrderJpaEntity entity);
+
+    @Mapping(target = "id", source = "id.lineItemId")
+    @Mapping(target = "orderId", source = "id.orderId")
+    OrderItem toOrderItem(OrderItemJpaEntity entity);
 
     @Mapping(target = "orderItems", ignore = true)
     OrderJpaEntity toOrderJpaEntity(Order order);

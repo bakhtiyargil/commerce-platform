@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderItem {
 
-    Long id;
+    Integer id;
     Long orderId;
     Long productId;
     BigDecimal unitPrice;

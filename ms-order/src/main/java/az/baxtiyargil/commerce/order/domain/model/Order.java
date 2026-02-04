@@ -33,7 +33,7 @@ public class Order {
         }
 
         var seen = new HashSet<>();
-        var exists = !this.getItems()
+        var exists = !items
                 .stream()
                 .map(OrderItem::getProductId)
                 .allMatch(seen::add);
