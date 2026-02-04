@@ -1,15 +1,14 @@
-package az.baxtiyargil.commerce.order.adapter.out.client;
+package az.baxtiyargil.commerce.order.adapter.out.client.product;
 
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import java.util.Set;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CustomerResponse {
+public class ProductResponse {
 
-    Long id;
-    String name;
-    String email;
+    Set<Long> productIds;
 
 }

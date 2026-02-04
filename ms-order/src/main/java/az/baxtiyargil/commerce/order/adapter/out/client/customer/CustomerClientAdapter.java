@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.order.adapter.out.client;
+package az.baxtiyargil.commerce.order.adapter.out.client.customer;
 
 import az.baxtiyargil.commerce.order.adapter.out.client.mapper.CustomerMapper;
 import az.baxtiyargil.commerce.order.application.port.out.CheckCustomerPort;

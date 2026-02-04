@@ -43,3 +43,7 @@ spring:
 service:
   customer:
     url: http://ms-customer
+  store:
+    url: http://ms-store
+  product:
+    url: http://ms-product
