@@ -1,7 +1,9 @@
 package az.baxtiyargil.commerce.order.adapter.in;
 
-import az.baxtiyargil.commerce.order.adapter.dto.PlaceOrderRequest;
-import az.baxtiyargil.commerce.order.domain.service.OrderService;
+import az.baxtiyargil.commerce.order.adapter.in.dto.PlaceOrderWebRequest;
+import az.baxtiyargil.commerce.order.adapter.in.mapper.OrderWebMapper;
+import az.baxtiyargil.commerce.order.application.port.in.dto.PlaceOrderRequest;
+import az.baxtiyargil.commerce.order.application.usecase.PlaceOrderUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,11 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderService orderService;
+    private final PlaceOrderUseCase placeOrder;
+    private final OrderWebMapper orderWebMapper;
 
     @PostMapping
-    public void placeOrder(@Valid @RequestBody PlaceOrderRequest placeOrderRequest) {
-        orderService.placeOrder(placeOrderRequest);
+    public void placeOrder(@Valid @RequestBody PlaceOrderWebRequest placeOrderWebRequest) {
+        PlaceOrderRequest placeOrderRequest = orderWebMapper.toOrder(placeOrderWebRequest);
+        placeOrder.execute(placeOrderRequest);
     }
 
 }

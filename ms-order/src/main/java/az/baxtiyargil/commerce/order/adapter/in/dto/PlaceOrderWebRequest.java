@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.order.adapter.dto;
+package az.baxtiyargil.commerce.order.adapter.in.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class PlaceOrderRequest {
+public class PlaceOrderWebRequest {
 
     @NotNull
     private Long storeId;
@@ -18,6 +18,6 @@ public class PlaceOrderRequest {
 
     @NotEmpty
     @Size(max = 100)
-    private List<@NotNull @Valid AddOrderItemRequest> orderItems;
+    private List<@NotNull @Valid AddOrderItemWebRequest> orderItems;
 
 }

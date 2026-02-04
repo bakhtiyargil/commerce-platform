@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.order.adapter.dto;
+package az.baxtiyargil.commerce.order.adapter.in.dto;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -7,7 +7,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class AddOrderItemRequest {
+public class AddOrderItemWebRequest {
 
     @NotNull
     private Long productId;

@@ -1,7 +1,6 @@
 package az.baxtiyargil.commerce.order.adapter.out.client;
 
-import az.baxtiyargil.commerce.order.adapter.dto.CustomerResponse;
-import az.baxtiyargil.commerce.order.adapter.mapper.CustomerMapper;
+import az.baxtiyargil.commerce.order.adapter.out.client.mapper.CustomerMapper;
 import az.baxtiyargil.commerce.order.application.port.out.CheckCustomerPort;
 import az.baxtiyargil.commerce.order.application.port.out.LoadCustomerPort;
 import az.baxtiyargil.commerce.order.domain.model.CustomerProfile;

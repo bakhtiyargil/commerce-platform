@@ -1,6 +1,5 @@
 package az.baxtiyargil.commerce.order.adapter.out.client;
 
-import az.baxtiyargil.commerce.order.adapter.dto.CustomerResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

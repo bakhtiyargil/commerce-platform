@@ -1,6 +1,6 @@
-package az.baxtiyargil.commerce.order.adapter.mapper;
+package az.baxtiyargil.commerce.order.adapter.out.client.mapper;
 
-import az.baxtiyargil.commerce.order.adapter.dto.CustomerResponse;
+import az.baxtiyargil.commerce.order.adapter.out.client.CustomerResponse;
 import az.baxtiyargil.commerce.order.domain.model.CustomerProfile;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;

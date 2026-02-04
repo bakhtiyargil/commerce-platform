@@ -1,6 +1,6 @@
 package az.baxtiyargil.commerce.order.adapter.out.persistence;
 
-import az.baxtiyargil.commerce.order.adapter.mapper.OrderMapper;
+import az.baxtiyargil.commerce.order.adapter.out.persistence.mapper.OrderPersistenceMapper;
 import az.baxtiyargil.commerce.order.application.port.out.PersistOrderPort;
 import az.baxtiyargil.commerce.order.domain.model.Order;
 import jakarta.transaction.Transactional;
@@ -11,14 +11,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OrderPersistenceAdapter implements PersistOrderPort {
 
-    private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
+    private final OrderPersistenceMapper persistenceMapper;
 
     @Transactional
     @Override
     public Order persist(Order order) {
-        var orderJpaEntity = orderMapper.toOrderJpaEntity(order);
+        var orderJpaEntity = persistenceMapper.toOrderJpaEntity(order);
         orderJpaEntity = orderRepository.save(orderJpaEntity);
-        return orderMapper.toOrder(orderJpaEntity);
+        return persistenceMapper.toOrder(orderJpaEntity);
     }
 }

@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.order.adapter.dto;
+package az.baxtiyargil.commerce.order.adapter.out.client;
 
 import lombok.AccessLevel;
 import lombok.Data;
