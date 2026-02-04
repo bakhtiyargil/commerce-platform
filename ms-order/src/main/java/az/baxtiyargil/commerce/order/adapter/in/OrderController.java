@@ -1,9 +1,11 @@
 package az.baxtiyargil.commerce.order.adapter.in;
 
+import az.baxtiyargil.commerce.order.adapter.in.dto.OrderWebResponse;
 import az.baxtiyargil.commerce.order.adapter.in.dto.PlaceOrderWebRequest;
 import az.baxtiyargil.commerce.order.adapter.in.mapper.OrderWebMapper;
 import az.baxtiyargil.commerce.order.application.port.in.dto.PlaceOrderRequest;
 import az.baxtiyargil.commerce.order.application.usecase.PlaceOrderUseCase;
+import az.baxtiyargil.commerce.order.domain.model.Order;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +22,10 @@ public class OrderController {
     private final OrderWebMapper orderWebMapper;
 
     @PostMapping
-    public void placeOrder(@Valid @RequestBody PlaceOrderWebRequest placeOrderWebRequest) {
+    public OrderWebResponse placeOrder(@Valid @RequestBody PlaceOrderWebRequest placeOrderWebRequest) {
         PlaceOrderRequest placeOrderRequest = orderWebMapper.toOrder(placeOrderWebRequest);
-        placeOrder.execute(placeOrderRequest);
+        Order order = placeOrder.execute(placeOrderRequest);
+        return orderWebMapper.toOrderWebResponse(order);
     }
 
 }

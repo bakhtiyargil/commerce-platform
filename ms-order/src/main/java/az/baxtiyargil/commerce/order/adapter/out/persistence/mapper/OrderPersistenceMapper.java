@@ -23,6 +23,7 @@ public interface OrderPersistenceMapper {
     @Mapping(target = "customerId", source = "customerId")
     @Mapping(target = "storeId", source = "storeId")
     @Mapping(target = "items", source = "orderItems")
+    @Mapping(target = "placedAt", source = "orderedAt")
     Order toOrder(OrderJpaEntity entity);
 
     @Mapping(target = "id", source = "id.lineItemId")

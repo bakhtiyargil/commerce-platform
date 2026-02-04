@@ -21,9 +21,9 @@ public class PlaceOrderUseCase implements PlaceOrderCommand {
 
     @Override
     public Order execute(PlaceOrderRequest request) {
-        if (!checkCustomerPort.isValid(request.getCustomerId())) {
-            throw new ApplicationException(ApplicationErrorCodes.CUSTOMER_NOT_FOUND, request.getCustomerId());
-        }
+//        if (!checkCustomerPort.isValid(request.getCustomerId())) {
+//            throw new ApplicationException(ApplicationErrorCodes.CUSTOMER_NOT_FOUND, request.getCustomerId());
+//        }
 
         var order = orderMapper.toOrder(request);
         return persistOrderPort.persist(order);
