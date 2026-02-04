@@ -16,5 +16,6 @@ public class OrderItemId implements Serializable {
 
     @Column(name = "line_item_id", unique = true, nullable = false, updatable = false)
     private Integer lineItemId;
+    private Long orderId;
 
 }

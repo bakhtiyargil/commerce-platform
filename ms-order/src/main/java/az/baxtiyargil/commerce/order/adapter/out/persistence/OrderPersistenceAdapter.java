@@ -17,8 +17,9 @@ public class OrderPersistenceAdapter implements PersistOrderPort {
     @Transactional
     @Override
     public Order persist(Order order) {
-        var orderJpaEntity = persistenceMapper.toOrderJpaEntity(order);
+        OrderJpaEntity orderJpaEntity = persistenceMapper.toOrderJpaEntity(order);
         orderJpaEntity = orderRepository.save(orderJpaEntity);
         return persistenceMapper.toOrder(orderJpaEntity);
     }
+
 }
