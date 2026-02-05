@@ -3,6 +3,7 @@ package az.baxtiyargil.commerce.product.adapter.out.persistence.mapper;
 import az.baxtiyargil.commerce.product.adapter.out.persistence.ProductJpaEntity;
 import az.baxtiyargil.commerce.product.domain.model.Product;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
@@ -13,6 +14,7 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface ProductPersistenceMapper {
 
+    @Mapping(target = "details", source = "productDetails")
     Product toOrder(ProductJpaEntity entity);
 
 }

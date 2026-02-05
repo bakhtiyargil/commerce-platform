@@ -13,7 +13,7 @@ public class ProductClientAdapter implements CheckProductPort {
 
     @Override
     public Set<Long> whichExistsAmongThese(Set<Long> productIds) {
-        ProductResponse productResponse = productClient.findExistingProductIds(GetProductRequest.withIds(productIds));
+        ProductResponse productResponse = productClient.findExistingProductIds(productIds);
         productIds.removeAll(productResponse.getProductIds());
         return productIds;
     }

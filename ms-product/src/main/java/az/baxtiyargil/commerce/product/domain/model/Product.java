@@ -14,7 +14,7 @@ public class Product {
     String name;
     BigDecimal unitPrice;
     ProductDetails details;
-    String image;
+    byte[] image;
     String imageMimeType;
     String imageFileName;
     String imageCharset;

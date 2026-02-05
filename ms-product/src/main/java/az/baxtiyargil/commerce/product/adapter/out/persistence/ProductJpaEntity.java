@@ -1,22 +1,19 @@
 package az.baxtiyargil.commerce.product.adapter.out.persistence;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import az.baxtiyargil.commerce.product.adapter.out.persistence.converter.ProductDetailsConverter;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
 import static az.baxtiyargil.commerce.product.adapter.out.persistence.PersistenceConstants.SERIAL_VERSION_UID;
 
 @Data
@@ -40,12 +37,14 @@ public class ProductJpaEntity implements Serializable {
     @Column(name = "unit_price")
     private BigDecimal unitPrice;
 
-    @JdbcTypeCode(SqlTypes.JSON)
+    @Lob
+    @Convert(converter = ProductDetailsConverter.class)
     @Column(name = "product_details")
-    private ProductDetails status;
+    private ProductDetails productDetails;
 
+    @Lob
     @Column(name = "product_image")
-    private String image;
+    private byte[] image;
 
     @Column(name = "image_mime_type")
     private String imageMimeType;
@@ -65,7 +64,7 @@ public class ProductJpaEntity implements Serializable {
                                  String description,
                                  Integer[] sizes,
                                  String[] comments
-    ) {
+    ) implements Serializable {
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-@Order(3)
+@Order(1)
 public class ProductExistencePolicy implements Policy<PlaceOrderRequest> {
 
     private final CheckProductPort checkProductPort;

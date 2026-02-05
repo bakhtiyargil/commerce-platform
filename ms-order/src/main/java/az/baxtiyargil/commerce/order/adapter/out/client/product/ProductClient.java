@@ -2,7 +2,8 @@ package az.baxtiyargil.commerce.order.adapter.out.client.product;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import java.util.Set;
 
 @FeignClient(
         name = "product-client",
@@ -12,6 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface ProductClient {
 
     @GetMapping("/existing")
-    ProductResponse findExistingProductIds(@RequestBody GetProductRequest request);
+    ProductResponse findExistingProductIds(@RequestParam Set<Long> ids);
 
 }

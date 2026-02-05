@@ -1,6 +1,7 @@
 package az.baxtiyargil.commerce.product.adapter.out.persistence;
 
 import az.baxtiyargil.commerce.product.adapter.out.persistence.mapper.ProductPersistenceMapper;
+import az.baxtiyargil.commerce.product.application.port.out.FindExistingProductsPort;
 import az.baxtiyargil.commerce.product.application.port.out.FetchProductPort;
 import az.baxtiyargil.commerce.product.domain.error.exception.ApplicationErrorCodes;
 import az.baxtiyargil.commerce.product.domain.error.exception.ApplicationException;
@@ -8,10 +9,11 @@ import az.baxtiyargil.commerce.product.domain.model.Product;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-public class ProductPersistenceAdapter implements FetchProductPort {
+public class ProductPersistenceAdapter implements FetchProductPort, FindExistingProductsPort {
 
     private final ProductRepository productRepository;
     private final ProductPersistenceMapper persistenceMapper;
@@ -22,5 +24,10 @@ public class ProductPersistenceAdapter implements FetchProductPort {
         ProductJpaEntity productEntity = productRepository.findById(id)
                 .orElseThrow(() -> new ApplicationException(ApplicationErrorCodes.CUSTOMER_NOT_FOUND, id));
         return persistenceMapper.toOrder(productEntity);
+    }
+
+    @Override
+    public Set<Long> execute(Set<Long> ids) {
+        return productRepository.existingProductIds(ids);
     }
 }
