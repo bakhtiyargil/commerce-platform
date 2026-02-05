@@ -46,4 +46,4 @@ service:
   store:
     url: http://ms-store
   product:
-    url: http://ms-product
+    url: http://localhost:8085
