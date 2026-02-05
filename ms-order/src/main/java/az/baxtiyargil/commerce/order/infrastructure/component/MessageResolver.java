@@ -1,8 +1,7 @@
-package az.baxtiyargil.commerce.order.infrastructure.config;
+package az.baxtiyargil.commerce.order.infrastructure.component;
 
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
-
 import java.util.Locale;
 
 @Component

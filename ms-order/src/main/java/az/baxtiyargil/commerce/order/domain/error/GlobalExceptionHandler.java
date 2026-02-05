@@ -4,7 +4,7 @@ import az.baxtiyargil.commerce.order.domain.error.exception.ApplicationException
 import az.baxtiyargil.commerce.order.domain.error.exception.ErrorCode;
 import az.baxtiyargil.commerce.order.domain.error.exception.ValidationErrorCodes;
 import az.baxtiyargil.commerce.order.domain.error.exception.ValidationException;
-import az.baxtiyargil.commerce.order.infrastructure.config.MessageResolver;
+import az.baxtiyargil.commerce.order.infrastructure.component.MessageResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpHeaders;
