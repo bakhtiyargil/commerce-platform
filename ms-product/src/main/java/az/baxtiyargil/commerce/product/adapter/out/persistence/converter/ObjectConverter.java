@@ -12,7 +12,7 @@ public final class ObjectConverter {
         try {
             return objectMapper.writeValueAsBytes(obj);
         } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("Could serialize `object` to `byte`", e);
+            throw new IllegalArgumentException("Could not serialize `object` to `byte`", e);
         }
     }
 
@@ -20,7 +20,7 @@ public final class ObjectConverter {
         try {
             return objectMapper.readValue(bytes, clazz);
         } catch (IOException e) {
-            throw new IllegalArgumentException("Could deserialize `object` from `byte`", e);
+            throw new IllegalArgumentException("Could not deserialize `object` from `byte`", e);
         }
     }
 

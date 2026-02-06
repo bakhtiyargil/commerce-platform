@@ -8,7 +8,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
-@Order(3)
+@Order(1)
 public class CustomerExistencePolicy implements Policy<PlaceOrderRequest> {
 
     private final CheckCustomerPort checkCustomerPort;

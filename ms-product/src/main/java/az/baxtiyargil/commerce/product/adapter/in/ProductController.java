@@ -1,6 +1,5 @@
 package az.baxtiyargil.commerce.product.adapter.in;
 
-import az.baxtiyargil.commerce.product.adapter.in.dto.GetProductRequest;
 import az.baxtiyargil.commerce.product.adapter.in.dto.ExistingProductsWebResponse;
 import az.baxtiyargil.commerce.product.adapter.in.dto.ProductWebResponse;
 import az.baxtiyargil.commerce.product.adapter.in.mapper.ProductWebMapper;
@@ -8,8 +7,11 @@ import az.baxtiyargil.commerce.product.application.port.in.FindExistingProductsQ
 import az.baxtiyargil.commerce.product.application.port.in.GetProductQuery;
 import az.baxtiyargil.commerce.product.domain.model.Product;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import java.util.Set;
 
 @RestController

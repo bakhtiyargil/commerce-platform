@@ -14,6 +14,6 @@ public class FindExistingProductsUseCase implements FindExistingProductsQuery {
 
     @Override
     public Set<Long> execute(Set<Long> ids) {
-        return findExistingProductsPort.execute(ids);
+        return findExistingProductsPort.findExisting(ids);
     }
 }

@@ -4,6 +4,6 @@ import java.util.Set;
 
 public interface FindExistingProductsPort {
 
-    Set<Long> execute(Set<Long> ids);
+    Set<Long> findExisting(Set<Long> ids);
 
 }

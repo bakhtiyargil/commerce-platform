@@ -27,7 +27,7 @@ public class ProductPersistenceAdapter implements FetchProductPort, FindExisting
     }
 
     @Override
-    public Set<Long> execute(Set<Long> ids) {
+    public Set<Long> findExisting(Set<Long> ids) {
         return productRepository.existingProductIds(ids);
     }
 }
