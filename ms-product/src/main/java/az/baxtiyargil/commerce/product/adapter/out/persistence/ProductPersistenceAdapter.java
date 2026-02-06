@@ -15,7 +15,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ProductPersistenceAdapter implements FetchProductPort, FindExistingProductsPort {
 
-    private final ProductRepository productRepository;
+    private final ProductJpaRepository productRepository;
     private final ProductPersistenceMapper persistenceMapper;
 
     @Transactional
@@ -28,6 +28,6 @@ public class ProductPersistenceAdapter implements FetchProductPort, FindExisting
 
     @Override
     public Set<Long> findExisting(Set<Long> ids) {
-        return productRepository.existingProductIds(ids);
+        return productRepository.findExistingIds(ids);
     }
 }

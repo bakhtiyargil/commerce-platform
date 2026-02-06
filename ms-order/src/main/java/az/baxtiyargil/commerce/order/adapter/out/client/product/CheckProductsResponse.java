@@ -7,8 +7,9 @@ import java.util.Set;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductResponse {
+public class CheckProductsResponse {
 
-    Set<Long> productIds;
+    Set<Long> existingIds;
+    Set<Long> missingIds;
 
 }

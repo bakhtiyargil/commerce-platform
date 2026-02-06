@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-@Order(3)
+@Order(1)
 public class ProductExistencePolicy implements Policy<PlaceOrderRequest> {
 
     private final CheckProductPort checkProductPort;
@@ -25,7 +25,7 @@ public class ProductExistencePolicy implements Policy<PlaceOrderRequest> {
                 .stream()
                 .map(PlaceOrderRequest.AddOrderItemRequest::getProductId)
                 .collect(Collectors.toSet());
-        Set<Long> missing = checkProductPort.whichExistsAmongThese(itemIds);
+        Set<Long> missing = checkProductPort.whichMissingAmongThese(itemIds);
         if (!missing.isEmpty()) {
             throw new ApplicationException(ApplicationErrorCodes.PRODUCT_NOT_FOUND, missing);
         }

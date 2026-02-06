@@ -1,25 +1,29 @@
 package az.baxtiyargil.commerce.product.adapter.in;
 
-import az.baxtiyargil.commerce.product.adapter.in.dto.ExistingProductsWebResponse;
+import az.baxtiyargil.commerce.product.adapter.in.dto.CheckProductsRequest;
+import az.baxtiyargil.commerce.product.adapter.in.dto.CheckProductsWebResponse;
 import az.baxtiyargil.commerce.product.adapter.in.dto.ProductWebResponse;
 import az.baxtiyargil.commerce.product.adapter.in.mapper.ProductWebMapper;
 import az.baxtiyargil.commerce.product.application.port.in.FindExistingProductsQuery;
-import az.baxtiyargil.commerce.product.application.port.in.GetProductQuery;
+import az.baxtiyargil.commerce.product.application.port.in.CheckProductsExistenceQuery;
+import az.baxtiyargil.commerce.product.application.usecase.dto.CheckProductsResult;
 import az.baxtiyargil.commerce.product.domain.model.Product;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.Set;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/v1/api/products")
 @RequiredArgsConstructor
 public class ProductController {
 
-    private final GetProductQuery getProductQuery;
+    private final CheckProductsExistenceQuery getProductQuery;
     private final ProductWebMapper productWebMapper;
     private final FindExistingProductsQuery findExistingProductsQuery;
 
@@ -29,9 +33,10 @@ public class ProductController {
         return productWebMapper.toProductWebResponse(product);
     }
 
-    @GetMapping("/existing")
-    public ExistingProductsWebResponse existing(@RequestParam Set<Long> ids) {
-        Set<Long> productIds = findExistingProductsQuery.execute(ids);
-        return new ExistingProductsWebResponse(productIds);
+    @PostMapping("/check-existence")
+    public ResponseEntity<CheckProductsWebResponse> existing(@Valid @RequestBody CheckProductsRequest request) {
+        CheckProductsResult result = findExistingProductsQuery.execute(request.getProductIds());
+        return ResponseEntity.ok(new CheckProductsWebResponse(result.getExistingIds(), result.getMissingIds()));
     }
+
 }
