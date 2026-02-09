@@ -20,7 +20,7 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/api/products")
+@RequestMapping("/v1/products")
 public class ProductController {
 
     private final GetProductQuery getProductQuery;
