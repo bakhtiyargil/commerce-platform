@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(
         name = "product-client",
         url = "${service.product.url}",
-        path = "/v1/api/products"
+        path = "/v1/products"
 )
 public interface ProductClient {
 

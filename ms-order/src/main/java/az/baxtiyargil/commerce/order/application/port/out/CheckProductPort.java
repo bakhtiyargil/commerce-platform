@@ -4,6 +4,6 @@ import java.util.Set;
 
 public interface CheckProductPort {
 
-    Set<Long> whichMissingAmongThese(Set<Long> productIds);
+    Set<Long> whichExistsAmongThese(Set<Long> productIds);
 
 }

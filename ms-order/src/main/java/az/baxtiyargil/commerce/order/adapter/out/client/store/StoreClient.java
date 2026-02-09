@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(
         name = "store-client",
         url = "${service.store.url}",
-        path = "/stores"
+        path = "/v1/stores"
 )
 public interface StoreClient {
 

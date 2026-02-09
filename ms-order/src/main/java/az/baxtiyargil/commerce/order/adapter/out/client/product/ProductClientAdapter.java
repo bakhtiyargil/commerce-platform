@@ -12,10 +12,11 @@ public class ProductClientAdapter implements CheckProductPort {
     private final ProductClient productClient;
 
     @Override
-    public Set<Long> whichMissingAmongThese(Set<Long> productIds) {
+    public Set<Long> whichExistsAmongThese(Set<Long> productIds) {
         CheckProductsResponse productResponse = productClient.findExistingProductIds(
-                new CheckProductsRequest(productIds));
-        return productResponse.getMissingIds();
+                new CheckProductsRequest(productIds)
+        );
+        return productResponse.existingIds();
     }
 
 }

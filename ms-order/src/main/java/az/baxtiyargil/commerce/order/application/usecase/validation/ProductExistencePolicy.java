@@ -25,9 +25,10 @@ public class ProductExistencePolicy implements Policy<PlaceOrderRequest> {
                 .stream()
                 .map(PlaceOrderRequest.AddOrderItemRequest::getProductId)
                 .collect(Collectors.toSet());
-        Set<Long> missing = checkProductPort.whichMissingAmongThese(itemIds);
-        if (!missing.isEmpty()) {
-            throw new ApplicationException(ApplicationErrorCodes.PRODUCT_NOT_FOUND, missing);
+        Set<Long> existing = checkProductPort.whichExistsAmongThese(itemIds);
+        itemIds.removeAll(existing);
+        if (!itemIds.isEmpty()) {
+            throw new ApplicationException(ApplicationErrorCodes.PRODUCT_NOT_FOUND, itemIds);
         }
         return ValidationResult.success();
     }
