@@ -7,7 +7,8 @@ import java.util.Set;
 
 public interface ProductJpaRepository extends JpaRepository<ProductJpaEntity, Long> {
 
-    @Query(value = "select p.PRODUCT_ID from co.PRODUCTS p\n" +
-            "where p.PRODUCT_ID in (:ids)", nativeQuery = true)
+    @Query(value = "select p.PRODUCT_ID " +
+                   "from   co.PRODUCTS p " +
+                   "where  p.PRODUCT_ID in (:ids)", nativeQuery = true)
     Set<Long> findExistingIds(@Param("ids") Set<Long> ids);
 }
