@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 )
 public interface StoreClient {
 
-    @GetMapping("/{storeId}")
-    StoreResponse getStoreById(@PathVariable Long storeId);
+    @GetMapping("/{storeId}/exists")
+    CheckStoreResponse existsById(@PathVariable Long storeId);
 
 }

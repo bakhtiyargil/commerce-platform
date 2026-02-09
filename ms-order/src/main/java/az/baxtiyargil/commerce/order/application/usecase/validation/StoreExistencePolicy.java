@@ -8,7 +8,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
-@Order(3)
+@Order(2)
 public class StoreExistencePolicy implements Policy<PlaceOrderRequest> {
 
     private final CheckStorePort checkStorePort;
@@ -19,7 +19,7 @@ public class StoreExistencePolicy implements Policy<PlaceOrderRequest> {
 
     @Override
     public ValidationResult validate(PlaceOrderRequest command) {
-        if (!checkStorePort.isValid(command.getStoreId())) {
+        if (!checkStorePort.exists(command.getStoreId())) {
             throw new ApplicationException(ApplicationErrorCodes.STORE_NOT_FOUND, command.getStoreId());
         }
         return ValidationResult.success();

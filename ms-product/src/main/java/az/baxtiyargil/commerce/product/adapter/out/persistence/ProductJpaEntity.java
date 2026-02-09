@@ -79,8 +79,8 @@ public class ProductJpaEntity implements Serializable {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
             return false;
         }
-        ProductJpaEntity order = (ProductJpaEntity) o;
-        return getId() != null && Objects.equals(getId(), order.getId());
+        ProductJpaEntity productJpaEntity = (ProductJpaEntity) o;
+        return getId() != null && Objects.equals(getId(), productJpaEntity.getId());
     }
 
     @Override

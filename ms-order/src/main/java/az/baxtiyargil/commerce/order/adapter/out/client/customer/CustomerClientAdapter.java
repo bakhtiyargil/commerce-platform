@@ -1,28 +1,22 @@
 package az.baxtiyargil.commerce.order.adapter.out.client.customer;
 
-import az.baxtiyargil.commerce.order.adapter.out.client.mapper.CustomerMapper;
 import az.baxtiyargil.commerce.order.application.port.out.CheckCustomerPort;
-import az.baxtiyargil.commerce.order.application.port.out.LoadCustomerPort;
-import az.baxtiyargil.commerce.order.domain.model.CustomerProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerClientAdapter implements LoadCustomerPort, CheckCustomerPort {
+public class CustomerClientAdapter implements CheckCustomerPort {
 
     private final CustomerClient customerClient;
-    private final CustomerMapper customerMapper;
 
     @Override
-    public CustomerProfile load(Long customerId) {
-        CustomerResponse customerResponse = customerClient.getCustomerById(customerId);
-        return customerMapper.toCustomerProfile(customerResponse);
-    }
-
-    @Override
-    public boolean isValid(Long customerId) {
-        CustomerResponse customerResponse = customerClient.getCustomerById(customerId);
-        return customerResponse != null;
+    public boolean exists(Long customerId) {
+        CheckCustomerResponse checkCustomerResponse = customerClient.existsById(customerId);
+        if (checkCustomerResponse == null || Objects.isNull(checkCustomerResponse.exists())) {
+            return false;
+        }
+        return checkCustomerResponse.exists();
     }
 }

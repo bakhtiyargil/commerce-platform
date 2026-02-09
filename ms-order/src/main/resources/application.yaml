@@ -42,8 +42,8 @@ spring:
 
 service:
   customer:
-    url: http://ms-customer
+    url: http://localhost:8095
   store:
-    url: http://ms-store
+    url: http://localhost:8090
   product:
     url: http://localhost:8085

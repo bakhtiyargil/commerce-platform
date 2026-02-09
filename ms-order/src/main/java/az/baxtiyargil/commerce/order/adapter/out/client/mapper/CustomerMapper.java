@@ -1,6 +1,6 @@
 package az.baxtiyargil.commerce.order.adapter.out.client.mapper;
 
-import az.baxtiyargil.commerce.order.adapter.out.client.customer.CustomerResponse;
+import az.baxtiyargil.commerce.order.adapter.out.client.customer.CheckCustomerResponse;
 import az.baxtiyargil.commerce.order.domain.model.CustomerProfile;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -13,6 +13,6 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface CustomerMapper {
 
-    CustomerProfile toCustomerProfile(CustomerResponse customerDto);
+    CustomerProfile toCustomerProfile(CheckCustomerResponse customerDto);
 
 }
