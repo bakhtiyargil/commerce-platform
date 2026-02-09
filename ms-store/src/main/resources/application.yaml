@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ms-order
+    name: ms-store
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: ${ORACLE_DRIVER}

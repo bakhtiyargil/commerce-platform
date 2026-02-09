@@ -1,13 +1,13 @@
-package az.baxtiyargil.commerce.auth;
+package az.baxtiyargil.commerce.store;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AuthApplication {
+public class StoreApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AuthApplication.class, args);
+        SpringApplication.run(StoreApplication.class, args);
     }
 
 }

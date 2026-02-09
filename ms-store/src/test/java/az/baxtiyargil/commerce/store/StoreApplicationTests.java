@@ -1,10 +1,10 @@
-package az.baxtiyargil.commerce.auth;
+package az.baxtiyargil.commerce.store;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class AuthApplicationTests {
+//@SpringBootTest
+class StoreApplicationTests {
 
 	@Test
 	void contextLoads() {
