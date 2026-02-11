@@ -67,8 +67,9 @@ public class ProductJpaEntity implements Serializable {
                                  String brand,
                                  String description,
                                  Integer[] sizes,
-                                 String[] comments
+                                 Review[] reviews
     ) implements Serializable {
+        public record Review(Integer rating, String review) implements Serializable {}
     }
 
     @Override

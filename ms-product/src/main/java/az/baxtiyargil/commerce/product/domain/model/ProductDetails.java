@@ -13,6 +13,12 @@ public class ProductDetails {
     String brand;
     String description;
     Integer[] sizes;
-    String[] comments;
+    Review[] reviews;
 
+    @Data
+    @FieldDefaults(level = AccessLevel.PRIVATE)
+    public static class Review {
+        Integer rating;
+        String review;
+    }
 }

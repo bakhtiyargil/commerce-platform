@@ -14,4 +14,7 @@ public interface ProductClient {
     @PostMapping("/check-existence")
     CheckProductsResponse findExistingProductIds(@RequestBody CheckProductsRequest request);
 
+    @PostMapping("/prices")
+    ProductPricesResponse getProductPrices(@RequestBody CheckProductsRequest request);
+
 }
