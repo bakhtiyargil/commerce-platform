@@ -19,7 +19,7 @@ public class PlaceOrderUseCase implements PlaceOrderCommand {
     private final PersistOrderPort persistOrderPort;
     private final List<Policy<PlaceOrderRequest>> policies;
     private final PolicyValidator<PlaceOrderRequest> policyValidator = PolicyValidator
-            .withMode(PolicyValidator.Mode.FAIL_FAST_SEQUENTIAL);
+            .withMode(PolicyValidator.Mode.FAIL_FAST_PARALLEL);
 
     @Override
     public Order execute(PlaceOrderRequest request) {
