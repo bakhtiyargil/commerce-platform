@@ -1,7 +1,6 @@
-package az.baxtiyargil.commerce.order.domain.error;
+package az.baxtiyargil.commerce.lib.error;
 
 import lombok.Getter;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

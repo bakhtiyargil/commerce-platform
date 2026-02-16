@@ -1,5 +1,7 @@
 package az.baxtiyargil.commerce.product.domain.error.exception;
 
+import az.baxtiyargil.commerce.lib.error.ErrorCode;
+import az.baxtiyargil.commerce.lib.error.RetryPolicy;
 import org.springframework.http.HttpStatus;
 
 public enum ValidationErrorCodes implements ErrorCode {

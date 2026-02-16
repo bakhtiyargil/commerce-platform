@@ -1,10 +1,10 @@
 package az.baxtiyargil.commerce.product.domain.error;
 
-import az.baxtiyargil.commerce.product.domain.error.exception.ApplicationException;
-import az.baxtiyargil.commerce.product.domain.error.exception.ErrorCode;
+import az.baxtiyargil.commerce.lib.error.ApplicationException;
+import az.baxtiyargil.commerce.lib.error.ErrorCode;
+import az.baxtiyargil.commerce.lib.error.ValidationException;
+import az.baxtiyargil.commerce.lib.error.component.MessageResolver;
 import az.baxtiyargil.commerce.product.domain.error.exception.ValidationErrorCodes;
-import az.baxtiyargil.commerce.product.domain.error.exception.ValidationException;
-import az.baxtiyargil.commerce.product.infrastructure.component.MessageResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpHeaders;
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         var errId = UUID.randomUUID().toString();
         String message = resolveMessage(ex.getErrorCode(), ex.getArgs());
         log("Validation error", errId, ex.getErrorCode().status(), ex);
-        var response = buildErrorResponse(errId, ex.getErrorCode().name(), message, ex.getErrorCode().status().value());
+        var response = buildErrorResponse(errId, ex.getErrorCode().asString(), message, ex.getErrorCode().status().value());
         return ResponseEntity.status(ex.getErrorCode().status()).body(response);
     }
 
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         var errId = UUID.randomUUID().toString();
         String message = resolveMessage(ex.getErrorCode(), ex.getArgs());
         log("Application error", errId, ex.getErrorCode().status(), ex);
-        var response = buildErrorResponse(errId, ex.getErrorCode().name(), message, ex.getErrorCode().status().value());
+        var response = buildErrorResponse(errId, ex.getErrorCode().asString(), message, ex.getErrorCode().status().value());
         return ResponseEntity.status(ex.getErrorCode().status()).body(response);
     }
 

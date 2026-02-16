@@ -1,7 +1,7 @@
 package az.baxtiyargil.commerce.order.domain.model;
 
-import az.baxtiyargil.commerce.order.domain.error.exception.ValidationErrorCodes;
-import az.baxtiyargil.commerce.order.domain.error.exception.ValidationException;
+import az.baxtiyargil.commerce.lib.error.ValidationException;
+import az.baxtiyargil.commerce.order.domain.error.ValidationErrorCodes;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;

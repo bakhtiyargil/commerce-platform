@@ -1,12 +1,20 @@
 package az.baxtiyargil.commerce.order.infrastructure.config;
 
+import az.baxtiyargil.commerce.lib.error.EnableErrorHandler;
+import az.baxtiyargil.commerce.lib.error.component.MessageResolver;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
+@EnableErrorHandler
 @Configuration
-public class MessageSourceConfiguration {
+public class ApplicationConfiguration {
+
+    @Bean
+    public MessageResolver messageResolver(MessageSource messageSource) {
+        return new MessageResolver(messageSource());
+    }
 
     @Bean
     public MessageSource messageSource() {

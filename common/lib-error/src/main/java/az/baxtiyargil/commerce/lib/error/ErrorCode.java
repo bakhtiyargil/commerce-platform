@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.order.domain.error.exception;
+package az.baxtiyargil.commerce.lib.error;
 
 import org.springframework.http.HttpStatus;
 

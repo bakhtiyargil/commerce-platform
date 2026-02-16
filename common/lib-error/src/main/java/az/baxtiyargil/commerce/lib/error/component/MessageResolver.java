@@ -1,10 +1,8 @@
-package az.baxtiyargil.commerce.product.infrastructure.component;
+package az.baxtiyargil.commerce.lib.error.component;
 
 import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Component;
 import java.util.Locale;
 
-@Component
 public class MessageResolver {
 
     private final MessageSource messageSource;

@@ -1,10 +1,10 @@
 package az.baxtiyargil.commerce.product.adapter.out.persistence;
 
+import az.baxtiyargil.commerce.lib.error.ApplicationException;
 import az.baxtiyargil.commerce.product.adapter.out.persistence.mapper.ProductPersistenceMapper;
 import az.baxtiyargil.commerce.product.application.port.out.FindExistingProductsPort;
 import az.baxtiyargil.commerce.product.application.port.out.FetchProductPort;
 import az.baxtiyargil.commerce.product.domain.error.exception.ApplicationErrorCodes;
-import az.baxtiyargil.commerce.product.domain.error.exception.ApplicationException;
 import az.baxtiyargil.commerce.product.domain.model.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

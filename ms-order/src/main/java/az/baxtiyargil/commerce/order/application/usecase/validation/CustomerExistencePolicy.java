@@ -1,9 +1,9 @@
 package az.baxtiyargil.commerce.order.application.usecase.validation;
 
+import az.baxtiyargil.commerce.lib.error.ApplicationException;
 import az.baxtiyargil.commerce.order.application.port.in.dto.PlaceOrderRequest;
 import az.baxtiyargil.commerce.order.application.port.out.CheckCustomerPort;
-import az.baxtiyargil.commerce.order.domain.error.exception.ApplicationErrorCodes;
-import az.baxtiyargil.commerce.order.domain.error.exception.ApplicationException;
+import az.baxtiyargil.commerce.order.domain.error.ApplicationErrorCodes;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
