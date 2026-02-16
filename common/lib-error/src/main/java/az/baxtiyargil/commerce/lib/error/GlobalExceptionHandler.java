@@ -1,6 +1,6 @@
 package az.baxtiyargil.commerce.lib.error;
 
-import az.baxtiyargil.commerce.lib.error.component.MessageResolver;
+import az.baxtiyargil.commerce.lib.error.component.ErrorMessageResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpHeaders;
@@ -18,10 +18,10 @@ import java.util.UUID;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private final MessageResolver messageResolver;
+    private final ErrorMessageResolver errorMessageResolver;
 
-    public GlobalExceptionHandler(MessageResolver messageResolver) {
-        this.messageResolver = messageResolver;
+    public GlobalExceptionHandler(ErrorMessageResolver errorMessageResolver) {
+        this.errorMessageResolver = errorMessageResolver;
     }
 
     @ExceptionHandler(ValidationException.class)
@@ -75,7 +75,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private String resolveMessage(ErrorCode code, Object[] args) {
         try {
-            return messageResolver.getMessage(code.message(), args);
+            return errorMessageResolver.getMessage(code.message(), args);
         } catch (NoSuchMessageException exception) {
             return code.message();
         }
