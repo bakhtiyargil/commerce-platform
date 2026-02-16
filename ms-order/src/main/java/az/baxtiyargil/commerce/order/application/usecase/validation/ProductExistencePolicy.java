@@ -1,6 +1,7 @@
 package az.baxtiyargil.commerce.order.application.usecase.validation;
 
 import az.baxtiyargil.commerce.lib.error.ApplicationException;
+import az.baxtiyargil.commerce.lib.error.ValidationException;
 import az.baxtiyargil.commerce.order.application.port.in.dto.PlaceOrderRequest;
 import az.baxtiyargil.commerce.order.application.port.out.CheckProductPort;
 import az.baxtiyargil.commerce.order.domain.error.EntityNotFoundErrorCodes;
@@ -41,7 +42,7 @@ public class ProductExistencePolicy implements Policy<PlaceOrderRequest> {
 
         itemsWithPrices.forEach((key, value) -> existing.computeIfPresent(key, (k, v) -> {
             if (value.compareTo(v) != 0) {
-                throw new ApplicationException(ValidationErrorCodes.PRODUCT_PRICE_MISMATCH, k);
+                throw new ValidationException(ValidationErrorCodes.PRODUCT_PRICE_MISMATCH, k);
             }
             return v;
         }));
