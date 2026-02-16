@@ -6,16 +6,17 @@ import org.springframework.http.HttpStatus;
 
 public enum ValidationErrorCodes implements ErrorCode {
 
-    ORDER_ITEMS_SIZE_EXCEEDED("ORDER_ITEMS_SIZE_EXCEEDED", RetryPolicy.NON_RETRYABLE),
-    DUPLICATE_PRODUCTS("DUPLICATE_PRODUCTS", RetryPolicy.NON_RETRYABLE);
+    ORDER_ITEMS_SIZE_EXCEEDED("ORDER_ITEMS_SIZE_EXCEEDED", HttpStatus.BAD_REQUEST, RetryPolicy.NON_RETRYABLE),
+    DUPLICATE_PRODUCTS("DUPLICATE_PRODUCTS", HttpStatus.BAD_REQUEST, RetryPolicy.NON_RETRYABLE),
+    PRODUCT_PRICE_MISMATCH("PRODUCT_PRICE_MISMATCH", HttpStatus.BAD_REQUEST, RetryPolicy.NON_RETRYABLE);
 
     private final String message;
     private final HttpStatus status;
     private final RetryPolicy retryPolicy;
 
-    ValidationErrorCodes(String message, RetryPolicy retryPolicy) {
+    ValidationErrorCodes(String message, HttpStatus httpStatus, RetryPolicy retryPolicy) {
         this.message = message;
-        this.status = HttpStatus.BAD_REQUEST;
+        this.status = httpStatus;
         this.retryPolicy = retryPolicy;
     }
 

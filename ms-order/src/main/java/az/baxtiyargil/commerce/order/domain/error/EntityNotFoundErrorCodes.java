@@ -4,21 +4,19 @@ import az.baxtiyargil.commerce.lib.error.ErrorCode;
 import az.baxtiyargil.commerce.lib.error.RetryPolicy;
 import org.springframework.http.HttpStatus;
 
-public enum ApplicationErrorCodes implements ErrorCode {
+public enum EntityNotFoundErrorCodes implements ErrorCode {
 
-    ORDER_NOT_FOUND("ORDER_NOT_FOUND", RetryPolicy.NON_RETRYABLE),
-    PRODUCT_NOT_FOUND("PRODUCT_NOT_FOUND", RetryPolicy.NON_RETRYABLE),
-    CUSTOMER_NOT_FOUND("CUSTOMER_NOT_FOUND", RetryPolicy.NON_RETRYABLE),
-    PRODUCT_PRICE_MISMATCH("PRODUCT_PRICE_MISMATCH", RetryPolicy.NON_RETRYABLE),
-    STORE_NOT_FOUND("STORE_NOT_FOUND", RetryPolicy.NON_RETRYABLE);
+    PRODUCT_NOT_FOUND("PRODUCT_NOT_FOUND", HttpStatus.NOT_FOUND, RetryPolicy.NON_RETRYABLE),
+    CUSTOMER_NOT_FOUND("CUSTOMER_NOT_FOUND", HttpStatus.NOT_FOUND, RetryPolicy.NON_RETRYABLE),
+    STORE_NOT_FOUND("STORE_NOT_FOUND", HttpStatus.NOT_FOUND, RetryPolicy.NON_RETRYABLE);
 
     private final String message;
     private final HttpStatus status;
     private final RetryPolicy retryPolicy;
 
-    ApplicationErrorCodes(String message, RetryPolicy retryPolicy) {
+    EntityNotFoundErrorCodes(String message, HttpStatus httpStatus, RetryPolicy retryPolicy) {
         this.message = message;
-        this.status = HttpStatus.INTERNAL_SERVER_ERROR;
+        this.status = httpStatus;
         this.retryPolicy = retryPolicy;
     }
 
