@@ -29,7 +29,7 @@ public class ProductExistencePolicy implements Policy<PlaceOrderRequest> {
                         PlaceOrderRequest.AddOrderItemRequest::getUnitPrice)
                 );
         Map<Long, BigDecimal> existing = checkProductPort.findProductsWithPrices(itemsWithPrices.keySet());
-        if (!itemsWithPrices.keySet().containsAll(existing.keySet())) {
+        if (existing.isEmpty() || !itemsWithPrices.keySet().containsAll(existing.keySet())) {
             throw new ApplicationException(ApplicationErrorCodes.PRODUCT_NOT_FOUND, itemsWithPrices.keySet());
         }
 
