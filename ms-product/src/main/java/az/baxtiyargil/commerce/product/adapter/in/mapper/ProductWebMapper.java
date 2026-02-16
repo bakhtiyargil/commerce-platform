@@ -4,7 +4,6 @@ import az.baxtiyargil.commerce.product.adapter.in.dto.ProductPricesWebResponse;
 import az.baxtiyargil.commerce.product.adapter.in.dto.ProductWebResponse;
 import az.baxtiyargil.commerce.product.domain.model.Product;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import java.util.List;

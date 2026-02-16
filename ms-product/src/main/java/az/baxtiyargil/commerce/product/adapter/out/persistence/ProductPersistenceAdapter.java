@@ -22,14 +22,14 @@ public class ProductPersistenceAdapter implements FetchProductPort, FindExisting
     public Product fetch(Long id) {
         ProductJpaEntity productEntity = productRepository.findById(id)
                 .orElseThrow(() -> new ApplicationException(ApplicationErrorCodes.PRODUCT_NOT_FOUND, id));
-        return persistenceMapper.toOrder(productEntity);
+        return persistenceMapper.toProduct(productEntity);
     }
 
     @Override
     public List<Product> fetchAll(Set<Long> ids) {
         List<ProductJpaEntity> productJpaEntities = productRepository.findAllById(ids);
         return productJpaEntities.stream()
-                .map(persistenceMapper::toOrder)
+                .map(persistenceMapper::toProduct)
                 .toList();
     }
 

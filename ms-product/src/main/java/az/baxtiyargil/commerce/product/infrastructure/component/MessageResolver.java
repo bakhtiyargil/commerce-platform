@@ -2,7 +2,6 @@ package az.baxtiyargil.commerce.product.infrastructure.component;
 
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
-
 import java.util.Locale;
 
 @Component

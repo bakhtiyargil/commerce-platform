@@ -15,6 +15,6 @@ import org.mapstruct.ReportingPolicy;
 public interface ProductPersistenceMapper {
 
     @Mapping(target = "details", source = "productDetails")
-    Product toOrder(ProductJpaEntity entity);
+    Product toProduct(ProductJpaEntity entity);
 
 }
