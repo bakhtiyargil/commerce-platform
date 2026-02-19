@@ -3,6 +3,7 @@ package az.baxtiyargil.commerce.auth.adapter.out;
 import az.baxtiyargil.commerce.auth.application.port.in.RegisterCommand;
 import az.baxtiyargil.commerce.auth.application.port.out.IdentityProviderPort;
 import az.baxtiyargil.commerce.auth.domain.AuthToken;
+import az.baxtiyargil.commerce.auth.infrastructure.KeycloakProperties;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,6 @@ import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -35,22 +35,11 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
 
     private final RestTemplate restTemplate;
     private final Keycloak keycloakAdminClient;
-
-    @Value("${keycloak.server-url}")
-    private String serverUrl;
-
-    @Value("${keycloak.realm}")
-    private String realm;
-
-    @Value("${keycloak.client-id}")
-    private String clientId;
-
-    @Value("${keycloak.client-secret}")
-    private String clientSecret;
+    private final KeycloakProperties keycloakProperties;
 
     @Override
     public String registerUser(RegisterCommand cmd, String defaultRole) {
-        RealmResource realmResource = keycloakAdminClient.realm(realm);
+        RealmResource realmResource = keycloakAdminClient.realm(keycloakProperties.getRealm());
 
         // Build user representation
         UserRepresentation user = new UserRepresentation();
@@ -86,8 +75,8 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
     public AuthToken login(String username, String password) {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "password");
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
+        body.add("client_id", keycloakProperties.getClientId());
+        body.add("client_secret", keycloakProperties.getClientSecret());
         body.add("username", username);
         body.add("password", password);
         body.add("scope", "openid");
@@ -100,8 +89,8 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
     public AuthToken refresh(String refreshToken) {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "refresh_token");
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
+        body.add("client_id", keycloakProperties.getClientId());
+        body.add("client_secret", keycloakProperties.getClientSecret());
         body.add("refresh_token", refreshToken);
 
         Map<?, ?> response = postToTokenEndpoint(body);
@@ -111,8 +100,8 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
     @Override
     public void logout(String refreshToken) {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
+        body.add("client_id", keycloakProperties.getClientId());
+        body.add("client_secret", keycloakProperties.getClientSecret());
         body.add("refresh_token", refreshToken);
 
         HttpHeaders headers = new HttpHeaders();
@@ -128,7 +117,7 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
 
     @Override
     public boolean usernameExists(String username) {
-        return !keycloakAdminClient.realm(realm)
+        return !keycloakAdminClient.realm(keycloakProperties.getRealm())
                 .users()
                 .searchByUsername(username, true)
                 .isEmpty();
@@ -136,7 +125,7 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
 
     @Override
     public boolean emailExists(String email) {
-        return !keycloakAdminClient.realm(realm)
+        return !keycloakAdminClient.realm(keycloakProperties.getRealm())
                 .users()
                 .searchByEmail(email, true)
                 .isEmpty();
@@ -145,12 +134,12 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
     @Override
     @SuppressWarnings("unchecked")
     public TokenIntrospectionResult introspect(String accessToken) {
-        String introspectUrl = serverUrl + "/realms/" + realm
+        String introspectUrl = keycloakProperties.getServerUrl() + "/realms/" + keycloakProperties.getRealm()
                 + "/protocol/openid-connect/token/introspect";
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
+        body.add("client_id", keycloakProperties.getClientId());
+        body.add("client_secret", keycloakProperties.getClientSecret());
         body.add("token", accessToken);
 
         HttpHeaders headers = new HttpHeaders();
@@ -208,11 +197,13 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
     }
 
     private String tokenUrl() {
-        return serverUrl + "/realms/" + realm + "/protocol/openid-connect/token";
+        return keycloakProperties.getServerUrl() + "/realms/"
+                + keycloakProperties.getRealm() + "/protocol/openid-connect/token";
     }
 
     private String logoutUrl() {
-        return serverUrl + "/realms/" + realm + "/protocol/openid-connect/logout";
+        return keycloakProperties.getServerUrl() + "/realms/"
+                + keycloakProperties.getRealm() + "/protocol/openid-connect/logout";
     }
 
     private Map<?, ?> postToTokenEndpoint(MultiValueMap<String, String> body) {

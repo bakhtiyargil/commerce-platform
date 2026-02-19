@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
     private static final String API_KEY_HEADER = "X-Gateway-Api-Key";
-    private static final String INTERNAL_PATH  = "/internal/";
+    private static final String INTERNAL_PATH  = "/v1/api/internal/";
 
     private final String expectedApiKey;
 
@@ -39,14 +39,12 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
         }
 
         String providedKey = request.getHeader(API_KEY_HEADER);
-
         if (!constantTimeEquals(expectedApiKey, providedKey)) {
             log.warn("Rejected /internal request — invalid or missing API key. URI={}",
                     request.getRequestURI());
             sendUnauthorized(response);
             return;
         }
-
         chain.doFilter(request, response);
     }
 

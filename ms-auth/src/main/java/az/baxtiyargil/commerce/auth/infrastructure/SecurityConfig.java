@@ -27,8 +27,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/internal/**").permitAll()   // guarded by ApiKeyAuthFilter
+                        .requestMatchers("/v1/api/auth/**").permitAll()
+                        .requestMatchers("/v1/api/internal/**").permitAll()   // guarded by ApiKeyAuthFilter
                         .requestMatchers("/actuator/health").permitAll()
                         .anyRequest().denyAll()
                 )

@@ -1,36 +1,28 @@
 package az.baxtiyargil.commerce.auth.infrastructure;
 
+import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
+@RequiredArgsConstructor
+@EnableConfigurationProperties(KeycloakProperties.class)
 public class ApplicationConfig {
 
     private static final String OAUTH_GRANT_TYPE = "client_credentials";
-
-    @Value("${keycloak.server-url}")
-    private String serverUrl;
-
-    @Value("${keycloak.realm}")
-    private String realm;
-
-    @Value("${keycloak.client-id}")
-    private String clientId;
-
-    @Value("${keycloak.client-secret}")
-    private String clientSecret;
+    private final KeycloakProperties keycloakProperties;
 
     @Bean
     public Keycloak keycloakAdminClient() {
         return KeycloakBuilder.builder()
-                .serverUrl(serverUrl)
-                .realm(realm)
-                .clientId(clientId)
-                .clientSecret(clientSecret)
+                .serverUrl(keycloakProperties.getServerUrl())
+                .realm(keycloakProperties.getRealm())
+                .clientId(keycloakProperties.getClientId())
+                .clientSecret(keycloakProperties.getClientSecret())
                 .grantType(OAUTH_GRANT_TYPE)
                 .build();
     }

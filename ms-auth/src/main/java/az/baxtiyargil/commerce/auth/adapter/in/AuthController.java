@@ -1,6 +1,11 @@
 package az.baxtiyargil.commerce.auth.adapter.in;
 
-import az.baxtiyargil.commerce.auth.adapter.in.dto.*;
+import az.baxtiyargil.commerce.auth.adapter.in.dto.LoginRequest;
+import az.baxtiyargil.commerce.auth.adapter.in.dto.LogoutRequest;
+import az.baxtiyargil.commerce.auth.adapter.in.dto.RefreshRequest;
+import az.baxtiyargil.commerce.auth.adapter.in.dto.RegisterRequest;
+import az.baxtiyargil.commerce.auth.adapter.in.dto.RegisterResponse;
+import az.baxtiyargil.commerce.auth.adapter.in.dto.TokenResponse;
 import az.baxtiyargil.commerce.auth.application.port.in.RegisterCommand;
 import az.baxtiyargil.commerce.auth.application.usecase.LoginUseCase;
 import az.baxtiyargil.commerce.auth.application.usecase.LogoutUseCase;
@@ -17,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/v1/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -33,9 +38,7 @@ public class AuthController {
      * Returns 201 with the Keycloak userId.
      */
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(
-            @Valid @RequestBody RegisterRequest req
-    ) {
+    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest req) {
         String userId = registerUseCase.execute(new RegisterCommand(
                 req.email(), req.username(), req.password(),
                 req.firstName(), req.lastName()
@@ -52,9 +55,7 @@ public class AuthController {
      * Returns access_token + refresh_token pair.
      */
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(
-            @Valid @RequestBody LoginRequest req
-    ) {
+    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest req) {
         AuthToken token = loginUseCase.execute(req.username(), req.password());
         return ResponseEntity.ok(toTokenResponse(token));
     }
@@ -66,9 +67,7 @@ public class AuthController {
      * Old refresh_token is rotated by Keycloak automatically.
      */
     @PostMapping("/refresh")
-    public ResponseEntity<TokenResponse> refresh(
-            @Valid @RequestBody RefreshRequest req
-    ) {
+    public ResponseEntity<TokenResponse> refresh(@Valid @RequestBody RefreshRequest req) {
         AuthToken token = refreshUseCase.execute(req.refreshToken());
         return ResponseEntity.ok(toTokenResponse(token));
     }
@@ -80,9 +79,7 @@ public class AuthController {
      * The access_token will expire naturally (Keycloak short TTL recommended).
      */
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(
-            @Valid @RequestBody LogoutRequest req
-    ) {
+    public ResponseEntity<Void> logout(@Valid @RequestBody LogoutRequest req) {
         logoutUseCase.execute(req.refreshToken());
         return ResponseEntity.noContent().build();
     }

@@ -5,18 +5,17 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: ${KEYCLOAK_URL}/realms/auth-app/protocol/openid-connect/certs
+          jwk-set-uri: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/certs
 
 keycloak:
-  server-url: ${KEYCLOAK_URL:http://localhost:8080}
-  realm: ${KEYCLOAK_REALM:myapp}
+  server-url: ${KEYCLOAK_URL:http://localhost:8180}
+  realm: ${KEYCLOAK_REALM:auth-app}
   client-id: ${KEYCLOAK_CLIENT_ID:auth-service-client}
   client-secret: ${KEYCLOAK_CLIENT_SECRET}
 
 auth:
   hmac:
     # MUST be identical in auth-service, AND all downstream microservices
-    # Rotate via Vault/AWS SSM — never commit to git
     secret: ${AUTH_HMAC_SECRET}
   context:
     ttl-seconds: 30
