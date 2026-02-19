@@ -13,5 +13,16 @@ keycloak:
   client-id: ${KEYCLOAK_CLIENT_ID:auth-service-client}
   client-secret: ${KEYCLOAK_CLIENT_SECRET}
 
+auth:
+  hmac:
+    # MUST be identical in auth-service, AND all downstream microservices
+    # Rotate via Vault/AWS SSM — never commit to git
+    secret: ${AUTH_HMAC_SECRET}
+  context:
+    ttl-seconds: 30
+  gateway:
+    # Static API key — gateway must send this to call /internal/** endpoints
+    api-key: ${GATEWAY_API_KEY}
+
 server:
   port: 8075
