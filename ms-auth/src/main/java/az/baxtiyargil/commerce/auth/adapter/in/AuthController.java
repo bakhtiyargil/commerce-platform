@@ -51,7 +51,7 @@ public class AuthController {
     /**
      * POST /auth/login
      * <p>
-     * Authenticate with username + password.
+     * Authenticate with username and password.
      * Returns access_token + refresh_token pair.
      */
     @PostMapping("/login")

@@ -1,51 +1,22 @@
 package az.baxtiyargil.commerce.auth.domain;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
 
-public final class ServiceAuthContext {
+public record ServiceAuthContext(String userId, String email, String username, Set<String> roles,
+                                 Set<String> permissions, String requestId, String correlationId, long issuedAt,
+                                 long expiresAt) {
 
-    @JsonProperty("userId")
-    private final String userId;
-
-    @JsonProperty("email")
-    private final String email;
-
-    @JsonProperty("username")
-    private final String username;
-
-    @JsonProperty("roles")
-    private final Set<String> roles;
-
-    @JsonProperty("permissions")
-    private final Set<String> permissions;
-
-    @JsonProperty("requestId")
-    private final String requestId;       // unique per auth-context creation
-
-    @JsonProperty("correlationId")
-    private final String correlationId;   // propagated from gateway → links entire request chain
-
-    @JsonProperty("issuedAt")
-    private final long issuedAt;
-
-    @JsonProperty("expiresAt")
-    private final long expiresAt;
-
-    @JsonCreator
-    public ServiceAuthContext(
-            @JsonProperty("userId") String userId,
-            @JsonProperty("email") String email,
-            @JsonProperty("username") String username,
-            @JsonProperty("roles") Set<String> roles,
-            @JsonProperty("permissions") Set<String> permissions,
-            @JsonProperty("requestId") String requestId,
-            @JsonProperty("correlationId") String correlationId,
-            @JsonProperty("issuedAt") long issuedAt,
-            @JsonProperty("expiresAt") long expiresAt
+    public ServiceAuthContext(String userId,
+                              String email,
+                              String username,
+                              Set<String> roles,
+                              Set<String> permissions,
+                              String requestId,
+                              String correlationId,
+                              long issuedAt,
+                              long expiresAt
     ) {
         this.userId = userId;
         this.email = email;

@@ -25,11 +25,4 @@ public class AuthException extends RuntimeException {
         };
     }
 
-    public AuthErrorCodes getErrorCode() {
-        return errorCode;
-    }
-
-    public HttpStatus getStatus() {
-        return status;
-    }
 }

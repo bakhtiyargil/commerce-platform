@@ -29,7 +29,7 @@ public class AuthProperties {
     @Setter
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class Context {
-        Integer ttlSeconds;
+        Long ttlSeconds;
     }
 
     @Getter
