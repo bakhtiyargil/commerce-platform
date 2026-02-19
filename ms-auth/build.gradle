@@ -20,6 +20,7 @@ configurations {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
 }
 
@@ -37,6 +38,7 @@ dependencies {
 	implementation "org.keycloak:keycloak-admin-client:${keycloakVersion}"
 	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	implementation "az.baxtiyargil.commerce:lib-error:${libErrorVersion}"
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
