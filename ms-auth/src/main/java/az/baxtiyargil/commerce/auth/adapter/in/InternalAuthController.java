@@ -20,10 +20,7 @@ public class InternalAuthController {
 
     @PostMapping("/auth-context")
     public ResponseEntity<AuthContextResponse> buildAuthContext(@Valid @RequestBody AuthContextRequest req) {
-        String signedContext = authContextUseCase.execute(
-                req.accessToken(),
-                req.correlationId()
-        );
+        String signedContext = authContextUseCase.execute(req.accessToken(), req.correlationId());
         return ResponseEntity.ok(new AuthContextResponse(signedContext, req.correlationId()));
     }
 }

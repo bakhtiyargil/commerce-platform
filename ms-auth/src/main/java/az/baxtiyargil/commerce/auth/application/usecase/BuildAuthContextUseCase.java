@@ -20,8 +20,7 @@ public class BuildAuthContextUseCase {
     public String execute(String accessToken, String correlationId) {
         IdentityProviderPort.TokenIntrospectionResult result = identityProvider.introspect(accessToken);
         if (!result.active()) {
-            throw new AuthException(AuthErrorCodes.INVALID_TOKEN,
-                    "Access token is inactive or expired");
+            throw new AuthException(AuthErrorCodes.INVALID_TOKEN, "Access token is inactive or expired");
         }
 
         ServiceAuthContext context = ServiceAuthContext.create(

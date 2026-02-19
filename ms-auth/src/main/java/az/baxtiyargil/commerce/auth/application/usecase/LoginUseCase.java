@@ -17,7 +17,6 @@ public class LoginUseCase {
         try {
             return identityProvider.login(username, password);
         } catch (Exception e) {
-            // Never leak whether username or password is wrong
             throw new AuthException(AuthErrorCodes.INVALID_CREDENTIALS, "Invalid username or password");
         }
     }

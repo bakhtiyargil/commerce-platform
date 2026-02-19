@@ -40,8 +40,6 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
     @Override
     public String registerUser(RegisterCommand cmd, String defaultRole) {
         RealmResource realmResource = keycloakAdminClient.realm(keycloakProperties.getRealm());
-
-        // Build user representation
         UserRepresentation user = new UserRepresentation();
         user.setUsername(cmd.username());
         user.setEmail(cmd.email());
@@ -74,12 +72,12 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
     @Override
     public AuthToken login(String username, String password) {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("grant_type", "password");
-        body.add("client_id", keycloakProperties.getClientId());
-        body.add("client_secret", keycloakProperties.getClientSecret());
-        body.add("username", username);
-        body.add("password", password);
-        body.add("scope", "openid");
+        body.add(KeycloakConstant.GRANT_TYPE, "password");
+        body.add(KeycloakConstant.CLIENT_ID, keycloakProperties.getClientId());
+        body.add(KeycloakConstant.CLIENT_SECRET, keycloakProperties.getClientSecret());
+        body.add(KeycloakConstant.USERNAME, username);
+        body.add(KeycloakConstant.PASSWORD, password);
+        body.add(KeycloakConstant.SCOPE, "openid");
 
         Map<?, ?> response = postToTokenEndpoint(body);
         return mapToAuthToken(response);
@@ -88,10 +86,10 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
     @Override
     public AuthToken refresh(String refreshToken) {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("grant_type", "refresh_token");
-        body.add("client_id", keycloakProperties.getClientId());
-        body.add("client_secret", keycloakProperties.getClientSecret());
-        body.add("refresh_token", refreshToken);
+        body.add(KeycloakConstant.GRANT_TYPE, "refresh_token");
+        body.add(KeycloakConstant.CLIENT_ID, keycloakProperties.getClientId());
+        body.add(KeycloakConstant.CLIENT_SECRET, keycloakProperties.getClientSecret());
+        body.add(KeycloakConstant.REFRESH_TOKEN, refreshToken);
 
         Map<?, ?> response = postToTokenEndpoint(body);
         return mapToAuthToken(response);
@@ -100,13 +98,12 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
     @Override
     public void logout(String refreshToken) {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("client_id", keycloakProperties.getClientId());
-        body.add("client_secret", keycloakProperties.getClientSecret());
-        body.add("refresh_token", refreshToken);
+        body.add(KeycloakConstant.CLIENT_ID, keycloakProperties.getClientId());
+        body.add(KeycloakConstant.CLIENT_SECRET, keycloakProperties.getClientSecret());
+        body.add(KeycloakConstant.REFRESH_TOKEN, refreshToken);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
         restTemplate.postForEntity(
                 logoutUrl(),
                 new HttpEntity<>(body, headers),
@@ -138,9 +135,9 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
                 + "/protocol/openid-connect/token/introspect";
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("client_id", keycloakProperties.getClientId());
-        body.add("client_secret", keycloakProperties.getClientSecret());
-        body.add("token", accessToken);
+        body.add(KeycloakConstant.CLIENT_ID, keycloakProperties.getClientId());
+        body.add(KeycloakConstant.CLIENT_SECRET, keycloakProperties.getClientSecret());
+        body.add(KeycloakConstant.TOKEN, accessToken);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -157,11 +154,10 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
                 return TokenIntrospectionResult.inactive();
             }
 
-            // Extract realm roles
             Set<String> roles = new HashSet<>();
-            Object realmAccess = claims.get("realm_access");
+            Object realmAccess = claims.get(KeycloakConstant.REALM_ACCESS);
             if (realmAccess instanceof Map<?, ?> ra) {
-                Object roleList = ra.get("roles");
+                Object roleList = ra.get(KeycloakConstant.ROLES);
                 if (roleList instanceof List<?> rl) {
                     rl.stream()
                             .filter(String.class::isInstance)
@@ -174,7 +170,7 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
 
             // Extract custom permissions claim (set via Keycloak mapper)
             Set<String> permissions = new HashSet<>();
-            Object permClaim = claims.get("permissions");
+            Object permClaim = claims.get(KeycloakConstant.PERMISSIONS);
             if (permClaim instanceof List<?> pl) {
                 pl.stream()
                         .filter(String.class::isInstance)
@@ -184,9 +180,9 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
 
             return new TokenIntrospectionResult(
                     true,
-                    (String) claims.get("sub"),
-                    (String) claims.get("email"),
-                    (String) claims.get("preferred_username"),
+                    (String) claims.get(KeycloakConstant.SUB),
+                    (String) claims.get(KeycloakConstant.EMAIL),
+                    (String) claims.get(KeycloakConstant.PREFERRED_USERNAME),
                     Collections.unmodifiableSet(roles),
                     Collections.unmodifiableSet(permissions)
             );
@@ -227,10 +223,10 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
 
     private AuthToken mapToAuthToken(Map<?, ?> body) {
         return AuthToken.of(
-                (String) body.get("access_token"),
-                (String) body.get("refresh_token"),
-                toLong(body.get("expires_in")),
-                toLong(body.get("refresh_expires_in"))
+                (String) body.get(KeycloakConstant.ACCESS_TOKEN),
+                (String) body.get(KeycloakConstant.REFRESH_TOKEN),
+                toLong(body.get(KeycloakConstant.EXPIRES_IN)),
+                toLong(body.get(KeycloakConstant.REFRESH_EXPIRES_IN))
         );
     }
 
