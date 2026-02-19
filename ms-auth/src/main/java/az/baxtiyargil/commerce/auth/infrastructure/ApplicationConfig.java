@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(KeycloakProperties.class)
+@EnableConfigurationProperties({KeycloakProperties.class, AuthProperties.class})
 public class ApplicationConfig {
 
     private static final String OAUTH_GRANT_TYPE = "client_credentials";

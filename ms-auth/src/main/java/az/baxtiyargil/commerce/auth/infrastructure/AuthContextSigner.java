@@ -3,7 +3,6 @@ package az.baxtiyargil.commerce.auth.infrastructure;
 import az.baxtiyargil.commerce.auth.domain.ServiceAuthContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -19,7 +18,8 @@ public class AuthContextSigner {
     private final byte[] secretBytes;
     private final ObjectMapper objectMapper;
 
-    public AuthContextSigner(@Value("${auth.hmac.secret}") String secret, ObjectMapper objectMapper) {
+    public AuthContextSigner(AuthProperties authProperties, ObjectMapper objectMapper) {
+        String secret = authProperties.getHmac().getSecret();
         if (secret == null || secret.length() < 32) {
             throw new IllegalStateException("auth.hmac.secret must be at least 32 characters. Check your environment.");
         }
@@ -81,7 +81,9 @@ public class AuthContextSigner {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
-    /** MessageDigest-style XOR comparison — O(n) regardless of first difference. */
+    /**
+     * MessageDigest-style XOR comparison — O(n) regardless of first difference.
+     */
     private boolean constantTimeEquals(String a, String b) {
         if (a.length() != b.length()) {
             return false;
