@@ -1,24 +1,23 @@
 package az.baxtiyargil.commerce.auth.adapter.out.client;
 
 import feign.form.FormProperty;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class IntrospectionRequest {
 
     @FormProperty("client_id")
-    private String clientId;
+    String clientId;
 
     @FormProperty("client_secret")
-    private String clientSecret;
+    String clientSecret;
 
     @FormProperty("token")
-    private String token;
+    String token;
 
 }
