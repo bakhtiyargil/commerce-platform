@@ -1,9 +1,9 @@
 package az.baxtiyargil.commerce.auth.application.usecase;
 
-import az.baxtiyargil.commerce.auth.application.exception.AuthErrorCodes;
-import az.baxtiyargil.commerce.auth.application.exception.AuthException;
+import az.baxtiyargil.commerce.auth.domain.error.AuthErrorCodes;
 import az.baxtiyargil.commerce.auth.application.port.out.IdentityProviderPort;
 import az.baxtiyargil.commerce.auth.domain.AuthToken;
+import az.baxtiyargil.commerce.lib.error.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public class LoginUseCase {
         try {
             return identityProvider.login(username, password);
         } catch (Exception e) {
-            throw new AuthException(AuthErrorCodes.INVALID_CREDENTIALS, "Invalid username or password");
+            throw new AuthException(AuthErrorCodes.INVALID_CREDENTIALS);
         }
     }
 }

@@ -1,3 +1,7 @@
+logging:
+  level:
+    root: WARN
+    az.baxtiyargil.commerce.auth.adapter.out.client: INFO
 
 spring:
   application:
@@ -16,18 +20,11 @@ keycloak:
 
 auth:
   hmac:
-    # MUST be identical in auth-service AND all downstream microservices
     secret: ${AUTH_HMAC_SECRET}
   context:
     ttl-seconds: 30
   gateway:
-    # Static API key — gateway must send this to call /internal/** endpoints
     api-key: ${GATEWAY_API_KEY}
 
 server:
   port: 8075
-
-logging:
-  level:
-    root: info
-    az.baxtiyargil.commerce.auth.adapter.out.client: DEBUG

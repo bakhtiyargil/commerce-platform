@@ -42,6 +42,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(ex.getErrorCode().status()).body(response);
     }
 
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<Object> handleAuthException(AuthException ex) {
+        var errId = UUID.randomUUID().toString();
+        String message = resolveMessage(ex.getErrorCode(), ex.getArgs());
+        log("Authentication error", errId, ex.getErrorCode().status(), ex);
+        var response = buildErrorResponse(errId, ex.getErrorCode().asString(), message, ex.getErrorCode().status().value());
+        return ResponseEntity.status(ex.getErrorCode().status()).body(response);
+    }
+
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status,

@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.auth.application.exception;
+package az.baxtiyargil.commerce.auth.domain.error;
 
 import az.baxtiyargil.commerce.lib.error.ErrorCode;
 import az.baxtiyargil.commerce.lib.error.RetryPolicy;

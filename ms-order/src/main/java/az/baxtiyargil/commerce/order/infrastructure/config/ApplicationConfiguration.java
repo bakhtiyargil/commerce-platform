@@ -12,11 +12,10 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 public class ApplicationConfiguration {
 
     @Bean
-    public ErrorMessageResolver errorMessageResolver(MessageSource messageSource) {
+    public ErrorMessageResolver errorMessageResolver() {
         return new ErrorMessageResolver(messageSource());
     }
 
-    @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:i18n/messages");

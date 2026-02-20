@@ -7,12 +7,12 @@ import az.baxtiyargil.commerce.auth.adapter.out.client.LogoutRequest;
 import az.baxtiyargil.commerce.auth.adapter.out.client.PasswordGrantRequest;
 import az.baxtiyargil.commerce.auth.adapter.out.client.RefreshTokenRequest;
 import az.baxtiyargil.commerce.auth.adapter.out.client.TokenResponse;
-import az.baxtiyargil.commerce.auth.application.exception.AuthErrorCodes;
-import az.baxtiyargil.commerce.auth.application.exception.AuthException;
+import az.baxtiyargil.commerce.auth.domain.error.AuthErrorCodes;
 import az.baxtiyargil.commerce.auth.application.port.in.RegisterCommand;
 import az.baxtiyargil.commerce.auth.application.port.out.IdentityProviderPort;
 import az.baxtiyargil.commerce.auth.domain.AuthToken;
 import az.baxtiyargil.commerce.auth.infrastructure.KeycloakProperties;
+import az.baxtiyargil.commerce.lib.error.AuthException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,11 +50,11 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
 
         try (Response response = realmResource.users().create(user)) {
             if (response.getStatus() == 409) {
-                throw new AuthException(AuthErrorCodes.USERNAME_TAKEN, "User already exists");
+                throw new AuthException(AuthErrorCodes.USERNAME_TAKEN);
             }
             if (response.getStatus() != 201) {
                 log.error("Keycloak user creation failed — status {}", response.getStatus());
-                throw new AuthException(AuthErrorCodes.KEYCLOAK_UNAVAILABLE, "Failed to create user");
+                throw new AuthException(AuthErrorCodes.KEYCLOAK_UNAVAILABLE);
             }
 
             String location = response.getHeaderString("Location");

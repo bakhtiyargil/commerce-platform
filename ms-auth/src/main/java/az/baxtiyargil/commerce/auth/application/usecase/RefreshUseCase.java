@@ -1,9 +1,9 @@
 package az.baxtiyargil.commerce.auth.application.usecase;
 
-import az.baxtiyargil.commerce.auth.application.exception.AuthErrorCodes;
-import az.baxtiyargil.commerce.auth.application.exception.AuthException;
+import az.baxtiyargil.commerce.auth.domain.error.AuthErrorCodes;
 import az.baxtiyargil.commerce.auth.application.port.out.IdentityProviderPort;
 import az.baxtiyargil.commerce.auth.domain.AuthToken;
+import az.baxtiyargil.commerce.lib.error.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +17,7 @@ public class RefreshUseCase {
         try {
             return identityProvider.refresh(refreshToken);
         } catch (Exception e) {
-            throw new AuthException(AuthErrorCodes.INVALID_REFRESH_TOKEN,
-                    "Refresh token is invalid or expired");
+            throw new AuthException(AuthErrorCodes.INVALID_REFRESH_TOKEN);
         }
     }
 }
