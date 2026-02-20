@@ -1,5 +1,6 @@
 package az.baxtiyargil.commerce.auth.application.usecase;
 
+import az.baxtiyargil.commerce.auth.domain.Roles;
 import az.baxtiyargil.commerce.auth.domain.error.AuthErrorCodes;
 import az.baxtiyargil.commerce.auth.application.port.in.RegisterCommand;
 import az.baxtiyargil.commerce.auth.application.port.out.IdentityProviderPort;
@@ -21,6 +22,6 @@ public class RegisterUseCase {
             throw new AuthException(AuthErrorCodes.EMAIL_TAKEN);
         }
 
-        return identityProvider.registerUser(command, "CUSTOMER");
+        return identityProvider.registerUser(command, Roles.CUSTOMER.asString());
     }
 }

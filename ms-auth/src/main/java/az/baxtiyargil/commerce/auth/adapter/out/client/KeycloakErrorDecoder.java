@@ -17,11 +17,11 @@ public class KeycloakErrorDecoder implements ErrorDecoder {
 
         return switch (status) {
             case 401 -> {
-                log.warn("Keycloak authentication failed for method: {}", methodKey);
+                log.debug("Keycloak authentication failed for method: {}", methodKey);
                 yield new AuthException(AuthErrorCodes.INVALID_CREDENTIALS);
             }
             case 400 -> {
-                log.warn("Keycloak bad request for method: {}", methodKey);
+                log.debug("Keycloak bad request for method: {}", methodKey);
                 yield new AuthException(AuthErrorCodes.INVALID_REFRESH_TOKEN);
             }
             case 503 -> {

@@ -4,8 +4,14 @@ import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
 
-public record ServiceAuthContext(String userId, String email, String username, Set<String> roles,
-                                 Set<String> permissions, String requestId, String correlationId, long issuedAt,
+public record ServiceAuthContext(String userId,
+                                 String email,
+                                 String username,
+                                 Set<String> roles,
+                                 Set<String> permissions,
+                                 String requestId,
+                                 String correlationId,
+                                 long issuedAt,
                                  long expiresAt) {
 
     public ServiceAuthContext(String userId,
@@ -29,15 +35,13 @@ public record ServiceAuthContext(String userId, String email, String username, S
         this.expiresAt = expiresAt;
     }
 
-    public static ServiceAuthContext create(
-            String userId,
-            String email,
-            String username,
-            Set<String> roles,
-            Set<String> permissions,
-            String correlationId,
-            long ttlSeconds
-    ) {
+    public static ServiceAuthContext create(String userId,
+                                            String email,
+                                            String username,
+                                            Set<String> roles,
+                                            Set<String> permissions,
+                                            String correlationId,
+                                            long ttlSeconds) {
         long now = Instant.now().toEpochMilli();
         return new ServiceAuthContext(
                 userId, email, username, roles, permissions,

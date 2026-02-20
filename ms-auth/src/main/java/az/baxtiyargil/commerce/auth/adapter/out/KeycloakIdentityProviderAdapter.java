@@ -61,7 +61,7 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
             String userId = location.substring(location.lastIndexOf('/') + 1);
             RoleRepresentation role = realmResource.roles().get(defaultRole).toRepresentation();
             realmResource.users().get(userId).roles().realmLevel().add(List.of(role));
-            log.info("User registered — userId={}, role={}", userId, defaultRole);
+            log.debug("User registered — userId={}, role={}", userId, defaultRole);
             return userId;
         }
     }
