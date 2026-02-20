@@ -44,8 +44,7 @@ public class AuthController {
                 req.firstName(), req.lastName()
         ));
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new RegisterResponse(userId, "Registration successful"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new RegisterResponse(userId));
     }
 
     /**
@@ -85,9 +84,11 @@ public class AuthController {
     }
 
     private TokenResponse toTokenResponse(AuthToken t) {
-        return new TokenResponse(
-                t.accessToken(), t.refreshToken(),
-                t.expiresIn(), t.refreshExpiresIn(), t.tokenType()
+        return new TokenResponse(t.accessToken(),
+                t.refreshToken(),
+                t.expiresIn(),
+                t.refreshExpiresIn(),
+                t.tokenType()
         );
     }
 }
