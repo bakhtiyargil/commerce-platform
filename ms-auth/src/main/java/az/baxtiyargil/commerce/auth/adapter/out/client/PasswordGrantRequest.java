@@ -1,0 +1,32 @@
+package az.baxtiyargil.commerce.auth.adapter.out.client;
+
+import feign.form.FormProperty;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.FieldDefaults;
+
+@Data
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class PasswordGrantRequest {
+
+    @FormProperty("grant_type")
+    String grantType;
+
+    @FormProperty("client_id")
+    String clientId;
+
+    @FormProperty("client_secret")
+    String clientSecret;
+
+    @FormProperty("username")
+    String username;
+
+    @FormProperty("password")
+    String password;
+
+    @FormProperty("scope")
+    String scope;
+
+}

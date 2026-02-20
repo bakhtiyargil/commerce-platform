@@ -1,5 +1,14 @@
 package az.baxtiyargil.commerce.auth.adapter.out;
 
+import az.baxtiyargil.commerce.auth.adapter.out.client.IntrospectionRequest;
+import az.baxtiyargil.commerce.auth.adapter.out.client.IntrospectionResponse;
+import az.baxtiyargil.commerce.auth.adapter.out.client.KeycloakTokenClient;
+import az.baxtiyargil.commerce.auth.adapter.out.client.LogoutRequest;
+import az.baxtiyargil.commerce.auth.adapter.out.client.PasswordGrantRequest;
+import az.baxtiyargil.commerce.auth.adapter.out.client.RefreshTokenRequest;
+import az.baxtiyargil.commerce.auth.adapter.out.client.TokenResponse;
+import az.baxtiyargil.commerce.auth.application.exception.AuthErrorCodes;
+import az.baxtiyargil.commerce.auth.application.exception.AuthException;
 import az.baxtiyargil.commerce.auth.application.port.in.RegisterCommand;
 import az.baxtiyargil.commerce.auth.application.port.out.IdentityProviderPort;
 import az.baxtiyargil.commerce.auth.domain.AuthToken;
@@ -12,20 +21,10 @@ import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 @Slf4j
@@ -33,9 +32,9 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
 
-    private final RestTemplate restTemplate;
     private final Keycloak keycloakAdminClient;
     private final KeycloakProperties keycloakProperties;
+    private final KeycloakTokenClient keycloakTokenClient;
 
     @Override
     public String registerUser(RegisterCommand cmd, String defaultRole) {
@@ -51,65 +50,101 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
 
         try (Response response = realmResource.users().create(user)) {
             if (response.getStatus() == 409) {
-                throw new RuntimeException("User already exists in Keycloak");
+                throw new AuthException(AuthErrorCodes.USERNAME_TAKEN, "User already exists");
             }
             if (response.getStatus() != 201) {
                 log.error("Keycloak user creation failed — status {}", response.getStatus());
-                throw new RuntimeException("Failed to create user in identity provider");
+                throw new AuthException(AuthErrorCodes.KEYCLOAK_UNAVAILABLE, "Failed to create user");
             }
 
             String location = response.getHeaderString("Location");
             String userId = location.substring(location.lastIndexOf('/') + 1);
-
             RoleRepresentation role = realmResource.roles().get(defaultRole).toRepresentation();
             realmResource.users().get(userId).roles().realmLevel().add(List.of(role));
-
-            log.info("User registered successfully — userId={}, role={}", userId, defaultRole);
+            log.info("User registered — userId={}, role={}", userId, defaultRole);
             return userId;
         }
     }
 
     @Override
     public AuthToken login(String username, String password) {
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add(KeycloakConstant.GRANT_TYPE, "password");
-        body.add(KeycloakConstant.CLIENT_ID, keycloakProperties.getClientId());
-        body.add(KeycloakConstant.CLIENT_SECRET, keycloakProperties.getClientSecret());
-        body.add(KeycloakConstant.USERNAME, username);
-        body.add(KeycloakConstant.PASSWORD, password);
-        body.add(KeycloakConstant.SCOPE, "openid");
+        PasswordGrantRequest request = PasswordGrantRequest.builder()
+                .grantType("password")
+                .clientId(keycloakProperties.getClientId())
+                .clientSecret(keycloakProperties.getClientSecret())
+                .username(username)
+                .password(password)
+                .scope("openid")
+                .build();
 
-        Map<?, ?> response = postToTokenEndpoint(body);
+        TokenResponse response = keycloakTokenClient.login(request);
         return mapToAuthToken(response);
     }
 
     @Override
     public AuthToken refresh(String refreshToken) {
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add(KeycloakConstant.GRANT_TYPE, "refresh_token");
-        body.add(KeycloakConstant.CLIENT_ID, keycloakProperties.getClientId());
-        body.add(KeycloakConstant.CLIENT_SECRET, keycloakProperties.getClientSecret());
-        body.add(KeycloakConstant.REFRESH_TOKEN, refreshToken);
+        RefreshTokenRequest request = RefreshTokenRequest.builder()
+                .grantType("refresh_token")
+                .clientId(keycloakProperties.getClientId())
+                .clientSecret(keycloakProperties.getClientSecret())
+                .refreshToken(refreshToken)
+                .build();
 
-        Map<?, ?> response = postToTokenEndpoint(body);
+        TokenResponse response = keycloakTokenClient.refresh(request);
         return mapToAuthToken(response);
     }
 
     @Override
     public void logout(String refreshToken) {
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add(KeycloakConstant.CLIENT_ID, keycloakProperties.getClientId());
-        body.add(KeycloakConstant.CLIENT_SECRET, keycloakProperties.getClientSecret());
-        body.add(KeycloakConstant.REFRESH_TOKEN, refreshToken);
+        LogoutRequest request = LogoutRequest.builder()
+                .clientId(keycloakProperties.getClientId())
+                .clientSecret(keycloakProperties.getClientSecret())
+                .refreshToken(refreshToken)
+                .build();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        restTemplate.postForEntity(
-                logoutUrl(),
-                new HttpEntity<>(body, headers),
-                Void.class
-        );
+        keycloakTokenClient.logout(request);
         log.debug("Refresh token revoked successfully");
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public TokenIntrospectionResult introspect(String accessToken) {
+        IntrospectionRequest request = IntrospectionRequest.builder()
+                .clientId(keycloakProperties.getClientId())
+                .clientSecret(keycloakProperties.getClientSecret())
+                .token(accessToken)
+                .build();
+
+        IntrospectionResponse response = keycloakTokenClient.introspect(request);
+        if (!Boolean.TRUE.equals(response.getActive())) {
+            return TokenIntrospectionResult.inactive();
+        }
+
+        Set<String> roles = new HashSet<>();
+        if (response.getRealmAccess() != null) {
+            Object roleList = response.getRealmAccess().get(KeycloakConstant.ROLES);
+            if (roleList instanceof List<?> rl) {
+                rl.stream()
+                        .filter(String.class::isInstance)
+                        .map(String.class::cast)
+                        .filter(r -> !r.startsWith("default-roles") &&
+                                !r.equals("offline_access") &&
+                                !r.equals("uma_authorization"))
+                        .forEach(roles::add);
+            }
+        }
+
+        Set<String> permissions = response.getPermissions() != null
+                ? new HashSet<>(response.getPermissions())
+                : new HashSet<>();
+
+        return new TokenIntrospectionResult(true,
+                response.getSub(),
+                response.getEmail(),
+                response.getPreferredUsername(),
+                Collections.unmodifiableSet(roles),
+                Collections.unmodifiableSet(permissions)
+        );
     }
 
     @Override
@@ -128,110 +163,13 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
                 .isEmpty();
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public TokenIntrospectionResult introspect(String accessToken) {
-        String introspectUrl = keycloakProperties.getServerUrl() + "/realms/" + keycloakProperties.getRealm()
-                + "/protocol/openid-connect/token/introspect";
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add(KeycloakConstant.CLIENT_ID, keycloakProperties.getClientId());
-        body.add(KeycloakConstant.CLIENT_SECRET, keycloakProperties.getClientSecret());
-        body.add(KeycloakConstant.TOKEN, accessToken);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        try {
-            ResponseEntity<Map> response = restTemplate.postForEntity(
-                    introspectUrl,
-                    new HttpEntity<>(body, headers),
-                    Map.class
-            );
-
-            Map<?, ?> claims = response.getBody();
-            if (claims == null || !Boolean.TRUE.equals(claims.get("active"))) {
-                return TokenIntrospectionResult.inactive();
-            }
-
-            Set<String> roles = new HashSet<>();
-            Object realmAccess = claims.get(KeycloakConstant.REALM_ACCESS);
-            if (realmAccess instanceof Map<?, ?> ra) {
-                Object roleList = ra.get(KeycloakConstant.ROLES);
-                if (roleList instanceof List<?> rl) {
-                    rl.stream()
-                            .filter(String.class::isInstance)
-                            .map(String.class::cast)
-                            // skip Keycloak internal roles
-                            .filter(r -> !r.startsWith("default-roles") && !r.equals("offline_access") && !r.equals("uma_authorization"))
-                            .forEach(roles::add);
-                }
-            }
-
-            // Extract custom permissions claim (set via Keycloak mapper)
-            Set<String> permissions = new HashSet<>();
-            Object permClaim = claims.get(KeycloakConstant.PERMISSIONS);
-            if (permClaim instanceof List<?> pl) {
-                pl.stream()
-                        .filter(String.class::isInstance)
-                        .map(String.class::cast)
-                        .forEach(permissions::add);
-            }
-
-            return new TokenIntrospectionResult(
-                    true,
-                    (String) claims.get(KeycloakConstant.SUB),
-                    (String) claims.get(KeycloakConstant.EMAIL),
-                    (String) claims.get(KeycloakConstant.PREFERRED_USERNAME),
-                    Collections.unmodifiableSet(roles),
-                    Collections.unmodifiableSet(permissions)
-            );
-        } catch (Exception e) {
-            log.error("Token introspection failed", e);
-            return TokenIntrospectionResult.inactive();
-        }
-    }
-
-    private String tokenUrl() {
-        return keycloakProperties.getServerUrl() + "/realms/"
-                + keycloakProperties.getRealm() + "/protocol/openid-connect/token";
-    }
-
-    private String logoutUrl() {
-        return keycloakProperties.getServerUrl() + "/realms/"
-                + keycloakProperties.getRealm() + "/protocol/openid-connect/logout";
-    }
-
-    private Map<?, ?> postToTokenEndpoint(MultiValueMap<String, String> body) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        try {
-            ResponseEntity<Map> response = restTemplate.postForEntity(
-                    tokenUrl(),
-                    new HttpEntity<>(body, headers),
-                    Map.class
-            );
-            return Objects.requireNonNull(response.getBody());
-        } catch (HttpClientErrorException.Unauthorized e) {
-            throw new RuntimeException("Bad credentials");
-        } catch (Exception e) {
-            log.error("Keycloak token endpoint call failed", e);
-            throw new RuntimeException("Identity provider unavailable");
-        }
-    }
-
-    private AuthToken mapToAuthToken(Map<?, ?> body) {
+    private AuthToken mapToAuthToken(TokenResponse response) {
         return AuthToken.of(
-                (String) body.get(KeycloakConstant.ACCESS_TOKEN),
-                (String) body.get(KeycloakConstant.REFRESH_TOKEN),
-                toLong(body.get(KeycloakConstant.EXPIRES_IN)),
-                toLong(body.get(KeycloakConstant.REFRESH_EXPIRES_IN))
+                response.getAccessToken(),
+                response.getRefreshToken(),
+                response.getExpiresIn(),
+                response.getRefreshExpiresIn()
         );
-    }
-
-    private long toLong(Object value) {
-        return value instanceof Number n ? n.longValue() : 0L;
     }
 
     private CredentialRepresentation buildPasswordCredential(String password) {

@@ -1,3 +1,4 @@
+
 spring:
   application:
     name: ms-auth
@@ -25,3 +26,8 @@ auth:
 
 server:
   port: 8075
+
+logging:
+  level:
+    root: info
+    az.baxtiyargil.commerce.auth.adapter.out.client: DEBUG
