@@ -3,6 +3,7 @@ package az.baxtiyargil.commerce.auth.infrastructure;
 import az.baxtiyargil.commerce.auth.adapter.out.client.KeycloakTokenClient;
 import az.baxtiyargil.commerce.lib.error.EnableErrorHandler;
 import az.baxtiyargil.commerce.lib.error.component.ErrorMessageResolver;
+import az.baxtiyargil.commerce.lib.security.AuthContextSigner;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -23,7 +24,7 @@ public class ApplicationConfig {
 
     private static final String OAUTH_GRANT_TYPE = "client_credentials";
 
-    private final MessageSource messageSource;
+    private final AuthProperties authProperties;
     private final KeycloakProperties keycloakProperties;
 
     @Bean
@@ -48,6 +49,11 @@ public class ApplicationConfig {
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;
+    }
+
+    @Bean
+    public AuthContextSigner authContextSigner() {
+        return new AuthContextSigner(authProperties.getHmac().getSecret());
     }
 
 }

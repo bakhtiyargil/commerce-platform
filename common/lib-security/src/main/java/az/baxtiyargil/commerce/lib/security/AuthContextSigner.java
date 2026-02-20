@@ -1,30 +1,23 @@
-package az.baxtiyargil.commerce.auth.infrastructure;
+package az.baxtiyargil.commerce.lib.security;
 
-import az.baxtiyargil.commerce.auth.domain.ServiceAuthContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-@Slf4j
-@Component
 public class AuthContextSigner {
 
     private static final String ALGORITHM = "HmacSHA256";
 
     private final byte[] secretBytes;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public AuthContextSigner(AuthProperties authProperties, ObjectMapper objectMapper) {
-        String secret = authProperties.getHmac().getSecret();
-        if (secret == null || secret.length() < 32) {
+    public AuthContextSigner(String hmacSecret) {
+        if (hmacSecret == null || hmacSecret.length() < 32) {
             throw new IllegalStateException("auth.hmac.secret must be at least 32 characters. Check your environment.");
         }
-        this.secretBytes = secret.getBytes(StandardCharsets.UTF_8);
-        this.objectMapper = objectMapper;
+        this.secretBytes = hmacSecret.getBytes(StandardCharsets.UTF_8);
     }
 
     public String sign(ServiceAuthContext ctx) {
@@ -63,7 +56,7 @@ public class AuthContextSigner {
         } catch (SignerException e) {
             throw e;
         } catch (Exception e) {
-            throw new SignerException("Failed to deserialise ServiceAuthContext", e);
+            throw new SignerException("Failed to deserialize ServiceAuthContext", e);
         }
     }
 

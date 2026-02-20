@@ -2,10 +2,10 @@ package az.baxtiyargil.commerce.auth.application.usecase;
 
 import az.baxtiyargil.commerce.auth.domain.error.AuthErrorCodes;
 import az.baxtiyargil.commerce.auth.application.port.out.IdentityProviderPort;
-import az.baxtiyargil.commerce.auth.domain.ServiceAuthContext;
-import az.baxtiyargil.commerce.auth.infrastructure.AuthContextSigner;
 import az.baxtiyargil.commerce.auth.infrastructure.AuthProperties;
 import az.baxtiyargil.commerce.lib.error.AuthException;
+import az.baxtiyargil.commerce.lib.security.AuthContextSigner;
+import az.baxtiyargil.commerce.lib.security.ServiceAuthContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

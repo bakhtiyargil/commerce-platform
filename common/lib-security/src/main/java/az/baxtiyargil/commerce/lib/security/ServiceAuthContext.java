@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.auth.domain;
+package az.baxtiyargil.commerce.lib.security;
 
 import java.time.Instant;
 import java.util.Set;

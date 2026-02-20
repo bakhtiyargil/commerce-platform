@@ -41,6 +41,7 @@ dependencies {
 	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	implementation "az.baxtiyargil.commerce:lib-error:${libErrorVersion}"
+	implementation "az.baxtiyargil.commerce:lib-security:${libSecurityVersion}"
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
