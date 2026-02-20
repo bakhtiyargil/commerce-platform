@@ -6,6 +6,7 @@ import az.baxtiyargil.commerce.auth.adapter.in.dto.RefreshRequest;
 import az.baxtiyargil.commerce.auth.adapter.in.dto.RegisterRequest;
 import az.baxtiyargil.commerce.auth.adapter.in.dto.RegisterResponse;
 import az.baxtiyargil.commerce.auth.adapter.in.dto.TokenResponse;
+import az.baxtiyargil.commerce.auth.adapter.in.mapper.AuthMapper;
 import az.baxtiyargil.commerce.auth.application.port.in.RegisterCommand;
 import az.baxtiyargil.commerce.auth.application.usecase.LoginUseCase;
 import az.baxtiyargil.commerce.auth.application.usecase.LogoutUseCase;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final AuthMapper authMapper;
     private final LoginUseCase loginUseCase;
     private final LogoutUseCase logoutUseCase;
     private final RefreshUseCase refreshUseCase;
@@ -56,7 +58,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest req) {
         AuthToken token = loginUseCase.execute(req.username(), req.password());
-        return ResponseEntity.ok(toTokenResponse(token));
+        return ResponseEntity.ok(authMapper.toTokenResponse(token));
     }
 
     /**
@@ -68,7 +70,7 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponse> refresh(@Valid @RequestBody RefreshRequest req) {
         AuthToken token = refreshUseCase.execute(req.refreshToken());
-        return ResponseEntity.ok(toTokenResponse(token));
+        return ResponseEntity.ok(authMapper.toTokenResponse(token));
     }
 
     /**
@@ -83,12 +85,4 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
-    private TokenResponse toTokenResponse(AuthToken t) {
-        return new TokenResponse(t.accessToken(),
-                t.refreshToken(),
-                t.expiresIn(),
-                t.refreshExpiresIn(),
-                t.tokenType()
-        );
-    }
 }
