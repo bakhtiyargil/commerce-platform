@@ -1,5 +1,6 @@
 package az.baxtiyargil.commerce.lib.error;
 
+import az.baxtiyargil.commerce.lib.error.component.GlobalExceptionHandler;
 import org.springframework.context.annotation.Import;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
