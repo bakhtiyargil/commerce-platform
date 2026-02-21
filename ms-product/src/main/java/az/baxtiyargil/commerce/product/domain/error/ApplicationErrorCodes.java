@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.product.domain.error.exception;
+package az.baxtiyargil.commerce.product.domain.error;
 
 import az.baxtiyargil.commerce.lib.error.ErrorCode;
 import az.baxtiyargil.commerce.lib.error.RetryPolicy;
@@ -6,12 +6,7 @@ import org.springframework.http.HttpStatus;
 
 public enum ApplicationErrorCodes implements ErrorCode {
 
-    ORDER_NOT_FOUND("ORDER_NOT_FOUND", RetryPolicy.NON_RETRYABLE),
-    INVENTORY_NOT_FOUND("INVENTORY_NOT_FOUND", RetryPolicy.NON_RETRYABLE),
-    PRODUCT_NOT_FOUND("PRODUCT_NOT_FOUND", RetryPolicy.NON_RETRYABLE),
-    CUSTOMER_NOT_FOUND("CUSTOMER_NOT_FOUND", RetryPolicy.NON_RETRYABLE),
-    STORE_NOT_FOUND("STORE_NOT_FOUND", RetryPolicy.NON_RETRYABLE),
-    INSUFFICIENT_INVENTORY("INSUFFICIENT_INVENTORY", RetryPolicy.RETRYABLE);
+    PRODUCT_NOT_FOUND("PRODUCT_NOT_FOUND", RetryPolicy.NON_RETRYABLE);
 
     private final String message;
     private final HttpStatus status;
