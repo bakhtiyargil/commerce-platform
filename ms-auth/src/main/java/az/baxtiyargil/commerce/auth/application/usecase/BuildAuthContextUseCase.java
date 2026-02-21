@@ -4,7 +4,7 @@ import az.baxtiyargil.commerce.auth.domain.error.AuthErrorCodes;
 import az.baxtiyargil.commerce.auth.application.port.out.IdentityProviderPort;
 import az.baxtiyargil.commerce.auth.infrastructure.AuthProperties;
 import az.baxtiyargil.commerce.lib.error.AuthException;
-import az.baxtiyargil.commerce.lib.security.AuthContextSigner;
+import az.baxtiyargil.commerce.lib.security.component.AuthContextSigner;
 import az.baxtiyargil.commerce.lib.security.ServiceAuthContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
