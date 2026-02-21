@@ -1,5 +1,6 @@
-package az.baxtiyargil.commerce.lib.security;
+package az.baxtiyargil.commerce.lib.security.component;
 
+import az.baxtiyargil.commerce.lib.security.ServiceAuthContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
