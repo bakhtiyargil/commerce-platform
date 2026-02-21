@@ -26,5 +26,10 @@ auth:
   gateway:
     api-key: ${GATEWAY_API_KEY}
 
+application:
+  security:
+    auth-context-filter:
+      enabled: false
+
 server:
   port: 8075

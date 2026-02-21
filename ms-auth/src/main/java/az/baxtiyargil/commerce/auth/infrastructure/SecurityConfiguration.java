@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityConfiguration {
 
     private final ApiKeyAuthFilter apiKeyAuthFilter;
 
@@ -28,11 +28,10 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/v1/api/auth/**").permitAll()
-                        .requestMatchers("/v1/api/internal/**").permitAll()   // guarded by ApiKeyAuthFilter
+                        .requestMatchers("/v1/api/internal/**").permitAll()
                         .requestMatchers("/actuator/health").permitAll()
                         .anyRequest().denyAll()
                 )
-                // ApiKeyAuthFilter runs before Spring Security's auth filters
                 .addFilterBefore(apiKeyAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(authEntryPoint())

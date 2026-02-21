@@ -14,16 +14,8 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthProperties {
 
-    Hmac hmac;
     Context context;
     Gateway gateway;
-
-    @Getter
-    @Setter
-    @FieldDefaults(level = AccessLevel.PRIVATE)
-    public static class Hmac {
-        String secret;
-    }
 
     @Getter
     @Setter

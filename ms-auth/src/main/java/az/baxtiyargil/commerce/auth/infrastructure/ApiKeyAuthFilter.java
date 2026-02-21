@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import static az.baxtiyargil.commerce.lib.security.SecurityHeader.API_KEY_HEADER;
 
 @Slf4j
 @Component
 public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
-    private static final String API_KEY_HEADER = "X-Gateway-Api-Key";
     private static final String INTERNAL_PATH  = "/v1/api/internal/";
 
     private final String expectedApiKey;
