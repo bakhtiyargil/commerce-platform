@@ -4,7 +4,7 @@ import az.baxtiyargil.commerce.lib.error.ApplicationException;
 import az.baxtiyargil.commerce.product.adapter.out.persistence.mapper.ProductPersistenceMapper;
 import az.baxtiyargil.commerce.product.application.port.out.FindExistingProductsPort;
 import az.baxtiyargil.commerce.product.application.port.out.FetchProductPort;
-import az.baxtiyargil.commerce.product.domain.error.ApplicationErrorCodes;
+import az.baxtiyargil.commerce.product.domain.error.EntityNotFoundErrorCodes;
 import az.baxtiyargil.commerce.product.domain.model.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class ProductPersistenceAdapter implements FetchProductPort, FindExisting
     @Override
     public Product fetch(Long id) {
         ProductJpaEntity productEntity = productRepository.findById(id)
-                .orElseThrow(() -> new ApplicationException(ApplicationErrorCodes.PRODUCT_NOT_FOUND, id));
+                .orElseThrow(() -> new ApplicationException(EntityNotFoundErrorCodes.PRODUCT_NOT_FOUND, id));
         return persistenceMapper.toProduct(productEntity);
     }
 

@@ -4,9 +4,11 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 @AutoConfiguration
+@ComponentScan("az.baxtiyargil.commerce.lib.error.component")
 public class SharedExceptionAutoConfiguration {
 
     @Bean
