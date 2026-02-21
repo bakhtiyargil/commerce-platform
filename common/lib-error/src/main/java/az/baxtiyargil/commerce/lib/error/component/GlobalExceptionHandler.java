@@ -102,4 +102,5 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private static String getCauseMessage(Exception ex) {
         return ex.getCause() != null ? ex.getCause().getMessage() : "NoCause";
     }
+
 }

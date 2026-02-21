@@ -30,4 +30,5 @@ public class ErrorResponse {
 
     public record Property(String name, String message) {
     }
+
 }

@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+az.baxtiyargil.commerce.lib.error.component.SharedExceptionAutoConfiguration
