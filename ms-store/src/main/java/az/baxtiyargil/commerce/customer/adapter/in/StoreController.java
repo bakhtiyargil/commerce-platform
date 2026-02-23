@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/stores")
+@RequestMapping("/v1/api/stores")
 public class StoreController {
 
     private final CheckStoreUseCase checkStoreUseCase;
