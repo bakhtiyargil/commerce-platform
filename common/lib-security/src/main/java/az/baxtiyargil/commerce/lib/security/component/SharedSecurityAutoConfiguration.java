@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @AutoConfiguration
 @RequiredArgsConstructor
@@ -31,6 +33,12 @@ public class SharedSecurityAutoConfiguration {
     @ConditionalOnMissingBean
     public AuthContextSigner authContextSigner() {
         return new AuthContextSigner(authHmacProperties.getSecret());
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public UserDetailsService userDetailsService() {
+        return username -> { throw new UsernameNotFoundException("Not supported"); };
     }
 
 }
