@@ -27,6 +27,8 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/v1/api/orders").permitAll()
                         .anyRequest().denyAll()
@@ -40,7 +42,7 @@ public class SecurityConfiguration {
     }
 
     private AuthenticationEntryPoint authEntryPoint() {
-        return (req, res, e) -> {
+        return (_, res, _) -> {
             res.setStatus(HttpStatus.UNAUTHORIZED.value());
             res.setContentType(MediaType.APPLICATION_JSON_VALUE);
             res.setCharacterEncoding(StandardCharsets.UTF_8.name());

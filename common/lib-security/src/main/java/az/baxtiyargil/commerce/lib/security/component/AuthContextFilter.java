@@ -34,7 +34,6 @@ public class AuthContextFilter extends OncePerRequestFilter {
             String signedContext = request.getHeader(AUTH_CONTEXT_HEADER);
 
             if (signedContext == null || signedContext.isBlank()) {
-                log.warn("Missing X-Auth-Context header — request URI: {}", request.getRequestURI());
                 sendUnauthorized(response, "Missing authentication context");
                 return;
             }
@@ -47,7 +46,7 @@ public class AuthContextFilter extends OncePerRequestFilter {
 
             chain.doFilter(request, response);
         } catch (AuthContextSigner.SignerException e) {
-            log.warn("Auth context validation failed: {}", e.getMessage());
+            log.error("Auth context validation failed: {}", e.getMessage());
             sendUnauthorized(response, "Invalid authentication context");
         } finally {
             ServiceAuthContextHolder.clear();
