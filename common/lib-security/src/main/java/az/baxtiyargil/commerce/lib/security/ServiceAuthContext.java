@@ -1,5 +1,6 @@
 package az.baxtiyargil.commerce.lib.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
@@ -52,6 +53,7 @@ public record ServiceAuthContext(String userId,
         );
     }
 
+    @JsonIgnore
     public boolean isExpired() {
         return Instant.now().toEpochMilli() > expiresAt;
     }

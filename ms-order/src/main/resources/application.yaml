@@ -47,3 +47,8 @@ service:
     url: http://localhost:8090
   product:
     url: http://localhost:8085
+
+application:
+  security:
+    auth-context-filter:
+      enabled: true
