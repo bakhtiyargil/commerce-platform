@@ -2,11 +2,9 @@ package az.baxtiyargil.commerce.lib.error.component;
 
 import az.baxtiyargil.commerce.lib.error.ApplicationException;
 import az.baxtiyargil.commerce.lib.error.AuthException;
-import az.baxtiyargil.commerce.lib.error.ErrorCode;
 import az.baxtiyargil.commerce.lib.error.ErrorResponse;
 import az.baxtiyargil.commerce.lib.error.ValidationException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -31,7 +29,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Object> handleValidationException(ValidationException ex) {
         var errId = UUID.randomUUID().toString();
-        String message = resolveMessage(ex.getErrorCode(), ex.getArgs());
+        String message = errorMessageResolver.getMessage(ex.getErrorCode(), ex.getArgs());
         log("Validation error", errId, ex.getErrorCode().status(), ex);
         var response = buildErrorResponse(errId, ex.getErrorCode().asString(), message, ex.getErrorCode().status().value());
         return ResponseEntity.status(ex.getErrorCode().status()).body(response);
@@ -40,7 +38,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<Object> handleApplicationException(ApplicationException ex) {
         var errId = UUID.randomUUID().toString();
-        String message = resolveMessage(ex.getErrorCode(), ex.getArgs());
+        String message = errorMessageResolver.getMessage(ex.getErrorCode(), ex.getArgs());
         log("Application error", errId, ex.getErrorCode().status(), ex);
         var response = buildErrorResponse(errId, ex.getErrorCode().asString(), message, ex.getErrorCode().status().value());
         return ResponseEntity.status(ex.getErrorCode().status()).body(response);
@@ -49,7 +47,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<Object> handleAuthException(AuthException ex) {
         var errId = UUID.randomUUID().toString();
-        String message = resolveMessage(ex.getErrorCode(), ex.getArgs());
+        String message = errorMessageResolver.getMessage(ex.getErrorCode(), ex.getArgs());
         log("Authentication error", errId, ex.getErrorCode().status(), ex);
         var response = buildErrorResponse(errId, ex.getErrorCode().asString(), message, ex.getErrorCode().status().value());
         return ResponseEntity.status(ex.getErrorCode().status()).body(response);
@@ -84,14 +82,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 message,
                 status
         );
-    }
-
-    private String resolveMessage(ErrorCode code, Object[] args) {
-        try {
-            return errorMessageResolver.getMessage(code.message(), args);
-        } catch (NoSuchMessageException exception) {
-            return code.message();
-        }
     }
 
     private void log(String title, String errId, HttpStatus status, Exception ex) {

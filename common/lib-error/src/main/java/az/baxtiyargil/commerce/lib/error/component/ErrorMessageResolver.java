@@ -1,6 +1,8 @@
 package az.baxtiyargil.commerce.lib.error.component;
 
+import az.baxtiyargil.commerce.lib.error.ErrorCode;
 import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 import java.util.Locale;
 
 public class ErrorMessageResolver {
@@ -11,11 +13,11 @@ public class ErrorMessageResolver {
         this.messageSource = messageSource;
     }
 
-    public String getMessage(String code, Object[] args) {
-        return messageSource.getMessage(
-                code,
-                args,
-                Locale.getDefault()
-        );
+    public String getMessage(ErrorCode code, Object[] args) {
+        try {
+            return messageSource.getMessage(code.message(), args, Locale.getDefault());
+        } catch (NoSuchMessageException exception) {
+            return code.message();
+        }
     }
 }
