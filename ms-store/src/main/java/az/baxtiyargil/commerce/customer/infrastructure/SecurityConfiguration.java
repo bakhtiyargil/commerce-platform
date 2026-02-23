@@ -1,19 +1,21 @@
 package az.baxtiyargil.commerce.customer.infrastructure;
 
+import az.baxtiyargil.commerce.lib.error.ApplicationException;
+import az.baxtiyargil.commerce.lib.error.SecurityErrorCodes;
+import az.baxtiyargil.commerce.lib.error.component.RestExceptionResponseWriteHandler;
 import az.baxtiyargil.commerce.lib.security.component.AuthContextFilter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -21,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 public class SecurityConfiguration {
 
     private final AuthContextFilter authContextFilter;
+    private final RestExceptionResponseWriteHandler restExceptionResponseWriteHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -35,21 +38,20 @@ public class SecurityConfiguration {
                         .anyRequest().denyAll()
                 )
                 .addFilterBefore(authContextFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(authEntryPoint())
+                .exceptionHandling(handler -> {
+                            handler.accessDeniedHandler(this::onAccessDeniedErrorHandler);
+                            handler.authenticationEntryPoint(this::onAccessDeniedErrorHandler);
+                        }
                 );
 
         return http.build();
     }
 
-    private AuthenticationEntryPoint authEntryPoint() {
-        return (_, res, _) -> {
-            res.setStatus(HttpStatus.UNAUTHORIZED.value());
-            res.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            res.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            res.getWriter().write("""
-                    {"error":"UNAUTHORIZED","message":"Authentication required"}
-                    """);
-        };
+    private void onAccessDeniedErrorHandler(HttpServletRequest req,
+                                            HttpServletResponse res,
+                                            RuntimeException e) throws IOException {
+        var accessDenied = new ApplicationException(SecurityErrorCodes.ACCESS_DENIED, e);
+        restExceptionResponseWriteHandler.call(req, res, accessDenied);
     }
+
 }

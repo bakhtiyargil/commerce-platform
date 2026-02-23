@@ -38,6 +38,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation "com.oracle.database.jdbc:ojdbc17:${oracleDriverVersion}"
 	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+	implementation "az.baxtiyargil.commerce:lib-error:${libErrorVersion}"
 	implementation "az.baxtiyargil.commerce:lib-security:${libSecurityVersion}"
 
 	compileOnly 'org.projectlombok:lombok'
