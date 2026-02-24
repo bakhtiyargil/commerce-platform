@@ -1,7 +1,6 @@
 logging:
   level:
     root: WARN
-    az.baxtiyargil.commerce.auth.adapter.out.client: INFO
 
 spring:
   application:
