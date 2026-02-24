@@ -1,6 +1,5 @@
 package az.baxtiyargil.commerce.lib.error.component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.MessageSource;
@@ -26,15 +25,6 @@ public class SharedExceptionAutoConfiguration {
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public RestExceptionResponseWriteHandler restExceptionResponseWriteHandler(
-            ObjectMapper objectMapper,
-            ErrorMessageResolver errorMessageResolver
-    ) {
-        return new RestExceptionResponseWriteHandler(objectMapper, errorMessageResolver);
     }
 
 }
