@@ -40,9 +40,7 @@ public class AuthContextFilter extends OncePerRequestFilter {
 
             ServiceAuthContext context = signer.verify(signedContext);
             ServiceAuthContextHolder.set(context);
-
             setSpringSecurityContext(context);
-            log.debug("Auth context validated — userId={}, correlationId={}", context.userId(), context.correlationId());
 
             chain.doFilter(request, response);
         } catch (AuthContextSigner.SignerException e) {

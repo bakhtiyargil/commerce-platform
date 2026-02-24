@@ -90,6 +90,7 @@ public class AuthContextSigner {
     }
 
     public static class SignerException extends RuntimeException {
+
         public SignerException(String msg) {
             super(msg);
         }
@@ -97,5 +98,6 @@ public class AuthContextSigner {
         public SignerException(String msg, Throwable t) {
             super(msg, t);
         }
+
     }
 }

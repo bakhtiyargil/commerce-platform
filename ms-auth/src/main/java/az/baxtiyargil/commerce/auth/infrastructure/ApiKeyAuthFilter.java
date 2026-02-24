@@ -40,8 +40,6 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
         String providedKey = request.getHeader(API_KEY_HEADER);
         if (!constantTimeEquals(expectedApiKey, providedKey)) {
-            log.warn("Rejected /internal request — invalid or missing API key. URI={}",
-                    request.getRequestURI());
             sendUnauthorized(response);
             return;
         }
@@ -57,9 +55,6 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
                 """);
     }
 
-    /**
-     * Constant-time compare — prevents timing oracle.
-     */
     private boolean constantTimeEquals(String a, String b) {
         if (b == null) {
             return false;
