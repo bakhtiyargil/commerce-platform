@@ -12,7 +12,7 @@ spring:
     username: ${ORACLE_DB_USER}
     password: ${ORACLE_DB_PASS}
     hikari:
-      pool-name: OrderHikariPool
+      pool-name: StoreHikariPool
       connection-timeout: 30000
       minimum-idle: 5
       maximum-pool-size: 20
@@ -34,15 +34,6 @@ spring:
         format_sql: false
         jdbc:
           batch_size: 50
-  kafka:
-    bootstrap-servers: localhost:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-    properties:
-      security.protocol: SASL_PLAINTEXT
-      sasl.mechanism: PLAIN
-      sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username=${KAFKA_USERNAME} password=${KAFKA_PASSWORD};
 
 server:
   port: 8090
