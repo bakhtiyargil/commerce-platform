@@ -1,3 +1,6 @@
+server:
+  port: 8095
+
 logging:
   level:
     root: WARN
@@ -35,5 +38,6 @@ spring:
         jdbc:
           batch_size: 50
 
-server:
-  port: 8095
+auth:
+  hmac:
+    secret: ${AUTH_HMAC_SECRET}

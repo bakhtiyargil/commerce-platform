@@ -1,3 +1,6 @@
+server:
+  port: 8075
+
 logging:
   level:
     root: WARN
@@ -24,6 +27,3 @@ auth:
     ttl-seconds: 30
   gateway:
     api-key: ${GATEWAY_API_KEY}
-
-server:
-  port: 8075
