@@ -1,10 +1,10 @@
 package az.baxtiyargil.commerce.auth.application.usecase;
 
-import az.baxtiyargil.commerce.auth.domain.Roles;
 import az.baxtiyargil.commerce.auth.domain.error.AuthErrorCodes;
 import az.baxtiyargil.commerce.auth.application.port.in.RegisterCommand;
 import az.baxtiyargil.commerce.auth.application.port.out.IdentityProviderPort;
 import az.baxtiyargil.commerce.lib.error.AuthException;
+import az.baxtiyargil.commerce.lib.security.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +22,6 @@ public class RegisterUseCase {
             throw new AuthException(AuthErrorCodes.EMAIL_TAKEN);
         }
 
-        return identityProvider.registerUser(command, Roles.CUSTOMER.asString());
+        return identityProvider.registerUser(command, Role.CUSTOMER.name());
     }
 }

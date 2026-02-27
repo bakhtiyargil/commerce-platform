@@ -24,10 +24,9 @@ public interface IdentityProviderPort {
                                     String userId,
                                     String email,
                                     String username,
-                                    Set<String> roles,
-                                    Set<String> permissions) {
+                                    Set<String> roles) {
         public static TokenIntrospectionResult inactive() {
-            return new TokenIntrospectionResult(false, null, null, null, Set.of(), Set.of());
+            return new TokenIntrospectionResult(false, null, null, null, Set.of());
         }
     }
 }

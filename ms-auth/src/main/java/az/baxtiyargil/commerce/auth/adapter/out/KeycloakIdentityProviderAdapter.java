@@ -134,16 +134,11 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
             }
         }
 
-        Set<String> permissions = response.getPermissions() != null
-                ? new HashSet<>(response.getPermissions())
-                : new HashSet<>();
-
         return new TokenIntrospectionResult(true,
                 response.getSub(),
                 response.getEmail(),
                 response.getPreferredUsername(),
-                Collections.unmodifiableSet(roles),
-                Collections.unmodifiableSet(permissions)
+                Collections.unmodifiableSet(roles)
         );
     }
 

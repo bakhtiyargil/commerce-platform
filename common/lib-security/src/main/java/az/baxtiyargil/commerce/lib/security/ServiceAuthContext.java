@@ -8,8 +8,8 @@ import java.util.UUID;
 public record ServiceAuthContext(String userId,
                                  String email,
                                  String username,
-                                 Set<String> roles,
-                                 Set<String> permissions,
+                                 Set<Role> roles,
+                                 Set<Permission> permissions,
                                  String requestId,
                                  String correlationId,
                                  long issuedAt,
@@ -18,8 +18,8 @@ public record ServiceAuthContext(String userId,
     public ServiceAuthContext(String userId,
                               String email,
                               String username,
-                              Set<String> roles,
-                              Set<String> permissions,
+                              Set<Role> roles,
+                              Set<Permission> permissions,
                               String requestId,
                               String correlationId,
                               long issuedAt,
@@ -39,8 +39,8 @@ public record ServiceAuthContext(String userId,
     public static ServiceAuthContext create(String userId,
                                             String email,
                                             String username,
-                                            Set<String> roles,
-                                            Set<String> permissions,
+                                            Set<Role> roles,
+                                            Set<Permission> permissions,
                                             String correlationId,
                                             long ttlSeconds) {
         long now = Instant.now().toEpochMilli();
@@ -58,11 +58,11 @@ public record ServiceAuthContext(String userId,
         return Instant.now().toEpochMilli() > expiresAt;
     }
 
-    public boolean hasRole(String role) {
+    public boolean hasRole(Role role) {
         return roles.contains(role);
     }
 
-    public boolean hasPermission(String permission) {
+    public boolean hasPermission(Permission permission) {
         return permissions.contains(permission);
     }
 }

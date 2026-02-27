@@ -42,11 +42,11 @@ public final class ServiceAuthContextHolder {
         return get().correlationId();
     }
 
-    public static boolean hasPermission(String permission) {
+    public static boolean hasPermission(Permission permission) {
         return get().hasPermission(permission);
     }
 
-    public static boolean hasRole(String role) {
+    public static boolean hasRole(Role role) {
         return get().hasRole(role);
     }
 }

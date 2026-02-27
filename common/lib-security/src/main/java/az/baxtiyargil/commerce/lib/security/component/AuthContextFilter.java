@@ -54,11 +54,11 @@ public class AuthContextFilter extends OncePerRequestFilter {
 
     private void setSpringSecurityContext(ServiceAuthContext context) {
         List<SimpleGrantedAuthority> roleAuthorities = context.roles().stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
                 .toList();
 
         List<SimpleGrantedAuthority> permissionAuthorities = context.permissions().stream()
-                .map(SimpleGrantedAuthority::new)
+                .map(prm -> new SimpleGrantedAuthority(prm.getValue()))
                 .toList();
 
         List<SimpleGrantedAuthority> allAuthorities = Stream.concat(
