@@ -45,7 +45,7 @@ public class KeycloakIdentityProviderAdapter implements IdentityProviderPort {
         user.setFirstName(cmd.firstName());
         user.setLastName(cmd.lastName());
         user.setEnabled(true);
-        user.setEmailVerified(false);
+        user.setEmailVerified(true); //temp for development, change in prod
         user.setCredentials(List.of(buildPasswordCredential(cmd.password())));
 
         try (Response response = realmResource.users().create(user)) {
