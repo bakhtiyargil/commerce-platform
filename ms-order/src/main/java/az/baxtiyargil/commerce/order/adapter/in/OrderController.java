@@ -6,6 +6,7 @@ import az.baxtiyargil.commerce.order.adapter.in.mapper.OrderWebMapper;
 import az.baxtiyargil.commerce.order.application.port.in.PlaceOrderCommand;
 import az.baxtiyargil.commerce.order.application.port.in.dto.PlaceOrderRequest;
 import az.baxtiyargil.commerce.order.domain.model.Order;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ public class OrderController {
     private final PlaceOrderCommand placeOrder;
     private final OrderWebMapper orderWebMapper;
 
+    @RolesAllowed("ADMIN")
     @PostMapping
     public OrderWebResponse placeOrder(@Valid @RequestBody PlaceOrderWebRequest placeOrderWebRequest) {
         PlaceOrderRequest placeOrderRequest = orderWebMapper.toOrder(placeOrderWebRequest);
