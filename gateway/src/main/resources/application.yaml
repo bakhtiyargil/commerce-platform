@@ -1,0 +1,11 @@
+logging:
+  level:
+    root: WARN
+
+spring:
+  application:
+    name: gateway
+
+auth:
+  hmac:
+    secret: ${AUTH_HMAC_SECRET}
