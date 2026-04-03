@@ -39,7 +39,7 @@ public class BaseSecurityConfiguration {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOriginPatterns(List.of(
-                "https://localhost:[8075, 8080, 8085, 8090, 8095]"
+                "https://localhost:[8070, 8075, 8080, 8085, 8090, 8095]"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
@@ -70,7 +70,7 @@ public class BaseSecurityConfiguration {
         applyCommonSecurityWithAutContextFilter(http);
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/v1/api/**").permitAll()
+                .requestMatchers("/v1/**").permitAll()
                 .anyRequest().denyAll()
         );
 

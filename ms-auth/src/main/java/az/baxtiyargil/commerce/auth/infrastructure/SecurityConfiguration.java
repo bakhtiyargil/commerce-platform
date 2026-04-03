@@ -22,8 +22,8 @@ public class SecurityConfiguration {
         baseSecurityConfiguration.applyCommonSecurity(http);
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/v1/api/auth/**").permitAll()
-                        .requestMatchers("/v1/api/internal/**").permitAll()
+                        .requestMatchers("/v1/auth/**").permitAll()
+                        .requestMatchers("/v1/auth/internal/**").permitAll()
                         .requestMatchers("/actuator/health").permitAll()
                         .anyRequest().denyAll()
                 )
