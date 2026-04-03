@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.order;
+package az.baxtiyargil.commerce.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
