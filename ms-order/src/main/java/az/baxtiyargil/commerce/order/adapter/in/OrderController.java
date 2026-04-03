@@ -22,7 +22,7 @@ public class OrderController {
     private final PlaceOrderCommand placeOrder;
     private final OrderWebMapper orderWebMapper;
 
-    @RolesAllowed("ADMIN")
+    @RolesAllowed("CUSTOMER")
     @PostMapping
     public OrderWebResponse placeOrder(@Valid @RequestBody PlaceOrderWebRequest placeOrderWebRequest) {
         PlaceOrderRequest placeOrderRequest = orderWebMapper.toOrder(placeOrderWebRequest);
