@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/api/orders")
+@RequestMapping("/v1/orders")
 public class OrderController {
 
     private final PlaceOrderCommand placeOrder;

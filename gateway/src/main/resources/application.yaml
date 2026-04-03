@@ -1,3 +1,6 @@
+server:
+  port: 8070
+
 logging:
   level:
     root: WARN
@@ -5,6 +8,26 @@ logging:
 spring:
   application:
     name: gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          httpclient:
+            connect-timeout: 1000
+            response-timeout: 10000
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins: "*"
+                allowedHeaders: "*"
+                allowedMethods: "*"
+          routes:
+            - id: order
+              uri: http://localhost:8080
+              predicates:
+                - Path=/api/v1/orders/**
+              filters:
+                - StripPrefix=1
 
 auth:
   hmac:
