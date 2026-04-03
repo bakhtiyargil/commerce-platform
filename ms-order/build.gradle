@@ -40,6 +40,7 @@ dependencies {
 	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 	implementation "az.baxtiyargil.commerce:lib-error:${libErrorVersion}"
 	implementation "az.baxtiyargil.commerce:lib-security:${libSecurityVersion}"
+	implementation "net.logstash.logback:logstash-logback-encoder:${logstashEncoder}"
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
