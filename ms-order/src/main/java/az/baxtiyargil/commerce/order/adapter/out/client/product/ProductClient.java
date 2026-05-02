@@ -14,6 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface ProductClient {
 
     @PostMapping("/prices")
-    ProductPricesResponse getProductPrices(@RequestBody CheckProductsRequest request);
+    ProductPricesResponse fetchPrices(@RequestBody GetPricesRequest request);
 
 }

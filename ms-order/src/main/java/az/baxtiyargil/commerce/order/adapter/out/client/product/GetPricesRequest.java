@@ -6,7 +6,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-public class CheckProductsRequest {
+public class GetPricesRequest {
 
     private Set<Long> productIds;
 

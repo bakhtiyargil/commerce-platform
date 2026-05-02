@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.customer.application.port.in;
+package az.baxtiyargil.commerce.store.application.port.in;
 
 public interface CheckStoreExistenceQuery {
 

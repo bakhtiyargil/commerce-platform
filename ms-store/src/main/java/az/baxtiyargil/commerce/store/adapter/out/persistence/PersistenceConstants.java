@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.customer.adapter.out.persistence;
+package az.baxtiyargil.commerce.store.adapter.out.persistence;
 
 public final class PersistenceConstants {
 

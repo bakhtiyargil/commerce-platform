@@ -1,7 +1,7 @@
-package az.baxtiyargil.commerce.customer.adapter.in;
+package az.baxtiyargil.commerce.store.adapter.in;
 
-import az.baxtiyargil.commerce.customer.adapter.in.dto.CheckStoreWebResponse;
-import az.baxtiyargil.commerce.customer.application.usecase.CheckStoreUseCase;
+import az.baxtiyargil.commerce.store.adapter.in.dto.StoreExistenceWebResponse;
+import az.baxtiyargil.commerce.store.application.usecase.CheckStoreUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +16,10 @@ public class StoreController {
 
     private final CheckStoreUseCase checkStoreUseCase;
 
-    @GetMapping("/{storeId}/exists")
-    public ResponseEntity<CheckStoreWebResponse> existsById(@PathVariable Long storeId) {
-        Boolean result = checkStoreUseCase.exists(storeId);
-        return ResponseEntity.ok(new CheckStoreWebResponse(result));
+    @GetMapping("/{id}/existence")
+    public ResponseEntity<StoreExistenceWebResponse> checkExistenceById(@PathVariable Long id) {
+        var result = checkStoreUseCase.exists(id);
+        return ResponseEntity.ok(new StoreExistenceWebResponse(result));
     }
 
 }

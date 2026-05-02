@@ -13,10 +13,10 @@ public class CustomerClientAdapter implements CheckCustomerPort {
 
     @Override
     public boolean exists(Long customerId) {
-        CheckCustomerResponse checkCustomerResponse = customerClient.existsById(customerId);
-        if (checkCustomerResponse == null || Objects.isNull(checkCustomerResponse.exists())) {
+        CustomerExistenceResponse customerExistenceResponse = customerClient.checkExistenceById(customerId);
+        if (customerExistenceResponse == null || Objects.isNull(customerExistenceResponse.exists())) {
             return false;
         }
-        return checkCustomerResponse.exists();
+        return customerExistenceResponse.exists();
     }
 }

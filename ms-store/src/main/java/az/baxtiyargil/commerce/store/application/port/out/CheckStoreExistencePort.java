@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.customer.application.port.out;
+package az.baxtiyargil.commerce.store.application.port.out;
 
 public interface CheckStoreExistencePort {
 

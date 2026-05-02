@@ -1,6 +1,6 @@
-package az.baxtiyargil.commerce.customer.adapter.out.persistence;
+package az.baxtiyargil.commerce.store.adapter.out.persistence;
 
-import az.baxtiyargil.commerce.customer.application.port.out.CheckStoreExistencePort;
+import az.baxtiyargil.commerce.store.application.port.out.CheckStoreExistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

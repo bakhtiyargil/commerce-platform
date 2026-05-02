@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.customer;
+package az.baxtiyargil.commerce.store;
 
 import org.junit.jupiter.api.Test;
 

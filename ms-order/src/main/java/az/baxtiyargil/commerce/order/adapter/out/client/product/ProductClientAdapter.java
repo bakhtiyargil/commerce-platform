@@ -16,8 +16,8 @@ public class ProductClientAdapter implements CheckProductPort {
 
     @Override
     public Map<Long, BigDecimal> findProductsWithPrices(Set<Long> productIds) {
-        ProductPricesResponse productResponse = productClient.getProductPrices(
-                new CheckProductsRequest(productIds)
+        ProductPricesResponse productResponse = productClient.fetchPrices(
+                new GetPricesRequest(productIds)
         );
         return productResponse.getProductPrices()
                 .stream()

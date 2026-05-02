@@ -1,7 +1,7 @@
-package az.baxtiyargil.commerce.customer.application.usecase;
+package az.baxtiyargil.commerce.store.application.usecase;
 
-import az.baxtiyargil.commerce.customer.application.port.in.CheckStoreExistenceQuery;
-import az.baxtiyargil.commerce.customer.application.port.out.CheckStoreExistencePort;
+import az.baxtiyargil.commerce.store.application.port.in.CheckStoreExistenceQuery;
+import az.baxtiyargil.commerce.store.application.port.out.CheckStoreExistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

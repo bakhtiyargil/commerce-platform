@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.customer.domain;
+package az.baxtiyargil.commerce.store.domain;
 
 import lombok.AccessLevel;
 import lombok.Data;

@@ -24,7 +24,7 @@ public class OrderController {
 
     @RolesAllowed("CUSTOMER")
     @PostMapping
-    public OrderWebResponse placeOrder(@Valid @RequestBody PlaceOrderWebRequest placeOrderWebRequest) {
+    public OrderWebResponse place(@Valid @RequestBody PlaceOrderWebRequest placeOrderWebRequest) {
         PlaceOrderRequest placeOrderRequest = orderWebMapper.toOrder(placeOrderWebRequest);
         Order order = placeOrder.execute(placeOrderRequest);
         return orderWebMapper.toOrderWebResponse(order);

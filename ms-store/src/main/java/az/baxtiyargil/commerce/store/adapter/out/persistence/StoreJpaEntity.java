@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.customer.adapter.out.persistence;
+package az.baxtiyargil.commerce.store.adapter.out.persistence;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,7 +15,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import static az.baxtiyargil.commerce.customer.adapter.out.persistence.PersistenceConstants.SERIAL_VERSION_UID;
+import static az.baxtiyargil.commerce.store.adapter.out.persistence.PersistenceConstants.SERIAL_VERSION_UID;
 
 @Data
 @Entity

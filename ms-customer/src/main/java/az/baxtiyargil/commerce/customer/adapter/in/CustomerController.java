@@ -1,6 +1,6 @@
 package az.baxtiyargil.commerce.customer.adapter.in;
 
-import az.baxtiyargil.commerce.customer.adapter.in.dto.CheckCustomerWebResponse;
+import az.baxtiyargil.commerce.customer.adapter.in.dto.CustomerExistenceWebResponse;
 import az.baxtiyargil.commerce.customer.application.usecase.CheckCustomerUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +16,10 @@ public class CustomerController {
 
     private final CheckCustomerUseCase checkCustomerUseCase;
 
-    @GetMapping("/{customerId}/exists")
-    public ResponseEntity<CheckCustomerWebResponse> existsById(@PathVariable Long customerId) {
-        Boolean result = checkCustomerUseCase.exists(customerId);
-        return ResponseEntity.ok(new CheckCustomerWebResponse(result));
+    @GetMapping("/{id}/existence")
+    public ResponseEntity<CustomerExistenceWebResponse> checkExistenceById(@PathVariable Long id) {
+        var result = checkCustomerUseCase.exists(id);
+        return ResponseEntity.ok(new CustomerExistenceWebResponse(result));
     }
 
 }

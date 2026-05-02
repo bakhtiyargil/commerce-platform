@@ -65,7 +65,7 @@ public class AuthController {
      * POST /auth/refresh
      * <p>
      * Exchange a refresh_token for a new token pair.
-     * Old refresh_token is rotated by Keycloak automatically.
+     * The old refresh_token is rotated by Keycloak automatically.
      */
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponse> refresh(@Valid @RequestBody RefreshRequest req) {

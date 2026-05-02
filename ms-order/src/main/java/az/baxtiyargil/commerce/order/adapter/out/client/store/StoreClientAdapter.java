@@ -13,10 +13,10 @@ public class StoreClientAdapter implements CheckStorePort {
 
     @Override
     public boolean exists(Long storeId) {
-        CheckStoreResponse checkStoreResponse = storeClient.existsById(storeId);
-        if (checkStoreResponse == null || Objects.isNull(checkStoreResponse.exists())) {
+        StoreExistenceResponse storeExistenceResponse = storeClient.checkExistenceById(storeId);
+        if (storeExistenceResponse == null || Objects.isNull(storeExistenceResponse.exists())) {
             return false;
         }
-        return checkStoreResponse.exists();
+        return storeExistenceResponse.exists();
     }
 }
