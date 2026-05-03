@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +26,7 @@ import static az.baxtiyargil.commerce.lib.security.SecurityHeader.AUTH_CONTEXT_H
 public class AuthContextFilter extends OncePerRequestFilter {
 
     private final AuthContextSigner signer;
+    private final SecurityExceptionHandler securityExceptionHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -34,8 +36,7 @@ public class AuthContextFilter extends OncePerRequestFilter {
             String signedContext = request.getHeader(AUTH_CONTEXT_HEADER);
 
             if (signedContext == null || signedContext.isBlank()) {
-                sendUnauthorized(response, "Missing authentication context");
-                return;
+                throw new AuthenticationServiceException("Missing authentication context");
             }
 
             ServiceAuthContext context = signer.verify(signedContext);
@@ -44,8 +45,13 @@ public class AuthContextFilter extends OncePerRequestFilter {
 
             chain.doFilter(request, response);
         } catch (AuthContextSigner.SignerException e) {
-            log.error("Auth context validation failed: {}", e.getMessage());
-            sendUnauthorized(response, "Invalid authentication context");
+            securityExceptionHandler.handleAuthenticationError(
+                    request,
+                    response,
+                    new AuthenticationServiceException("Invalid authentication context")
+            );
+        } catch (AuthenticationServiceException e) {
+            securityExceptionHandler.handleAuthenticationError(request, response, e);
         } finally {
             ServiceAuthContextHolder.clear();
             SecurityContextHolder.clearContext();

@@ -23,8 +23,9 @@ public class SharedSecurityAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public AuthContextFilter authContextFilter(AuthContextSigner authContextSigner) {
-        return new AuthContextFilter(authContextSigner);
+    public AuthContextFilter authContextFilter(AuthContextSigner authContextSigner,
+                                               SecurityExceptionHandler securityExceptionHandler) {
+        return new AuthContextFilter(authContextSigner, securityExceptionHandler);
     }
 
     @Bean

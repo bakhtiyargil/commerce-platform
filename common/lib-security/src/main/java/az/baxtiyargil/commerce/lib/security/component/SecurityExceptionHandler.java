@@ -25,11 +25,9 @@ public class SecurityExceptionHandler {
 
     private final ObjectMapper objectMapper;
 
-    public void handleAccessDenied(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            AccessDeniedException exception
-    ) throws IOException {
+    public void handleAccessDenied(HttpServletRequest request,
+                                   HttpServletResponse response,
+                                   AccessDeniedException exception) throws IOException {
         String userId = ServiceAuthContextHolder.getOptional()
                 .map(ServiceAuthContext::userId)
                 .orElse("anonymous");
@@ -45,18 +43,15 @@ public class SecurityExceptionHandler {
                 response,
                 HttpStatus.FORBIDDEN,
                 "ACCESS_DENIED",
-                "You do not have permission to access this resource",
+                exception.getMessage(),
                 request.getRequestURI(),
                 correlationId
         );
     }
 
-    public void handleAuthenticationError(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            AuthenticationException exception
-    ) throws IOException {
-
+    public void handleAuthenticationError(HttpServletRequest request,
+                                          HttpServletResponse response,
+                                          AuthenticationException exception) throws IOException {
         String correlationId = request.getHeader("X-Correlation-Id");
         if (correlationId == null) {
             correlationId = UUID.randomUUID().toString();
@@ -69,7 +64,7 @@ public class SecurityExceptionHandler {
                 response,
                 HttpStatus.UNAUTHORIZED,
                 "UNAUTHORIZED",
-                "Authentication required. Please provide valid credentials.",
+                exception.getMessage(),
                 request.getRequestURI(),
                 correlationId
         );

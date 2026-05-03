@@ -37,24 +37,17 @@ public class BaseSecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-
-        config.setAllowedOriginPatterns(List.of(
-                "https://localhost:[8070, 8075, 8080, 8085, 8090, 8095]"
-        ));
+        config.setAllowedOriginPatterns(
+                List.of("https://localhost:[8070, 8075, 8080, 8085, 8090, 8095]")
+        );
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
 
-        config.setAllowedHeaders(List.of(
-                "Authorization",
-                "Content-Type",
-                "X-Correlation-Id",
-                "X-Request-Id"
-        ));
+        config.setAllowedHeaders(
+                List.of("Authorization", "Content-Type", "X-Correlation-Id", "X-Request-Id")
+        );
 
-        config.setExposedHeaders(List.of(
-                "X-Correlation-Id",
-                "X-Request-Id"
-        ));
+        config.setExposedHeaders(List.of("X-Correlation-Id", "X-Request-Id"));
 
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
@@ -119,8 +112,7 @@ public class BaseSecurityConfiguration {
                                 .headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK)
                         )
 
-                        .contentTypeOptions(contentType -> {
-                        })
+                        .contentTypeOptions(contentType -> {})
 
                         .referrerPolicy(referrer -> referrer
                                 .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
