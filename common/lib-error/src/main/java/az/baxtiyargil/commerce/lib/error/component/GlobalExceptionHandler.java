@@ -60,7 +60,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String errId = UUID.randomUUID().toString();
         ErrorResponse response = new ErrorResponse(
                 errId,
-                "VALIDATION ERROR",
+                "VALIDATION_ERROR",
                 "VALIDATION FAILED",
                 HttpStatus.BAD_REQUEST.value()
         );
