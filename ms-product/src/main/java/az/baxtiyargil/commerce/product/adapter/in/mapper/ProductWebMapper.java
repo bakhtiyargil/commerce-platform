@@ -20,9 +20,7 @@ public interface ProductWebMapper {
     ProductPricesWebResponse.ProductPrice toProductPrice(Product product);
 
     default ProductPricesWebResponse toProductPricesWebResponse(List<Product> products) {
-        return new ProductPricesWebResponse(
-                products.stream().map(this::toProductPrice).toList()
-        );
+        return new ProductPricesWebResponse(products.stream().map(this::toProductPrice).toList());
     }
 
 }
