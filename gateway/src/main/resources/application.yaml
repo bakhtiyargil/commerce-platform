@@ -22,11 +22,14 @@ spring:
                 allowedHeaders: "*"
                 allowedMethods: "*"
           routes:
+            - id: auth-internal
+              uri: no://op
+              predicates:
+                - Path=/api/v1/auth/internal/**
             - id: auth
               uri: http://localhost:8075
               predicates:
                 - Path=/api/v1/auth/**
-                - Not=Path=/api/v1/auth/internal/**
               filters:
                 - StripPrefix=1
             - id: order
@@ -54,9 +57,13 @@ spring:
               filters:
                 - StripPrefix=1
 
-keycloak:
-  jwks-uri: ${KEYCLOAK_URL:http://localhost:8180}/realms/${KEYCLOAK_REALM:auth-app}/protocol/openid-connect/certs
+security:
+  keycloak:
+    jwks-uri: ${KEYCLOAK_URL:http://localhost:8180}/realms/${KEYCLOAK_REALM:auth-app}/protocol/openid-connect/certs
+    cache-ttl: 300000
+    cache-timeout: 15000
+    rate-limit-interval: 30000
 
-auth:
-  hmac:
-    secret: ${AUTH_HMAC_SECRET}
+client:
+  auth:
+    url: http://localhost:8075
