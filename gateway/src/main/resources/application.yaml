@@ -54,6 +54,9 @@ spring:
               filters:
                 - StripPrefix=1
 
+keycloak:
+  jwks-uri: ${KEYCLOAK_URL:http://localhost:8180}/realms/${KEYCLOAK_REALM:auth-app}/protocol/openid-connect/certs
+
 auth:
   hmac:
     secret: ${AUTH_HMAC_SECRET}

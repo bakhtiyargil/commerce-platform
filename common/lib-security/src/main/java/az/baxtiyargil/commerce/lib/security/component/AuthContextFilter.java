@@ -82,13 +82,4 @@ public class AuthContextFilter extends OncePerRequestFilter {
         authentication.setDetails(context);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
-
-    private void sendUnauthorized(HttpServletResponse response, String message) throws IOException {
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.getWriter().write(String.format(
-                "{\"error\":\"UNAUTHORIZED\",\"message\":\"%s\"}", message
-        ));
-    }
 }
