@@ -1,6 +1,9 @@
 package az.baxtiyargil.commerce.gateway.configuration;
 
+import az.baxtiyargil.commerce.gateway.client.AuthServiceClient;
 import az.baxtiyargil.commerce.gateway.component.AuthenticationGatewayFilter;
+import az.baxtiyargil.commerce.gateway.component.ConditionalWebFilter;
+import az.baxtiyargil.commerce.gateway.jwt.JwtLocalValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +13,7 @@ import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -18,33 +22,39 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private final AuthenticationGatewayFilter authenticationGatewayFilter;
+    private final JwtLocalValidator jwtLocalValidator;
+    private final AuthServiceClient authServiceClient;
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+        var publicMatcher = ServerWebExchangeMatchers.pathMatchers(PUBLIC_PATHS);
+        var gatewayFilter = new AuthenticationGatewayFilter(jwtLocalValidator, authServiceClient);
         return http
-            .csrf(ServerHttpSecurity.CsrfSpec::disable)
-            .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
-            .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
-            .logout(ServerHttpSecurity.LogoutSpec::disable)
-            .authorizeExchange(exchange -> exchange
-                .pathMatchers(PUBLIC_PATHS).permitAll()
-                .anyExchange().authenticated()
-            )
-            .addFilterAt(authenticationGatewayFilter, SecurityWebFiltersOrder.AUTHENTICATION)
-            .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
-            .exceptionHandling(ex -> ex
-                .authenticationEntryPoint((exchange, e) -> unauthorized(exchange))
-                .accessDeniedHandler((exchange, e) -> forbidden(exchange))
-            )
-            .build();
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
+                .logout(ServerHttpSecurity.LogoutSpec::disable)
+                .authorizeExchange(exchange -> exchange
+                        .matchers(publicMatcher).permitAll()
+                        .anyExchange().authenticated()
+                )
+                .addFilterBefore(
+                        new ConditionalWebFilter(gatewayFilter, publicMatcher),
+                        SecurityWebFiltersOrder.AUTHENTICATION
+                )
+                .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((exchange, e) -> unauthorized(exchange))
+                        .accessDeniedHandler((exchange, e) -> forbidden(exchange))
+                )
+                .build();
     }
 
     private static final String[] PUBLIC_PATHS = {
-        "/api/v1/auth/login",
-        "/api/v1/auth/register",
-        "/api/v1/auth/refresh",
-        "/actuator/**"
+            "/api/v1/auth/login",
+            "/api/v1/auth/register",
+            "/api/v1/auth/refresh",
+            "/actuator/**"
     };
 
     private Mono<Void> unauthorized(ServerWebExchange exchange) {

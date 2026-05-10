@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
@@ -18,9 +17,10 @@ import reactor.core.publisher.Mono;
 import java.text.ParseException;
 import java.util.Optional;
 
-@Component
 @RequiredArgsConstructor
 public class AuthenticationGatewayFilter implements WebFilter {
+
+    private static final String AUTH_CONTEXT_HEADER = "X-Auth-Context";
 
     private final JwtLocalValidator jwtLocalValidator;
     private final AuthServiceClient authServiceClient;
@@ -38,14 +38,14 @@ public class AuthenticationGatewayFilter implements WebFilter {
             return unauthorized(exchange, e.getMessage());
         }
 
+        //not working below
         //add cache
-        // phase 2 — cache check + keycloak introspection if miss
         return authServiceClient.getInternalAuthContext(token)
                 .flatMap(authContextResponse -> {
                     var mutatedRequest = exchange.getRequest().mutate()
                             .headers(headers -> {
                                 headers.remove(HttpHeaders.AUTHORIZATION);
-                                headers.set("X-Auth-Context", authContextResponse.authContext());
+                                headers.set(AUTH_CONTEXT_HEADER, authContextResponse.authContext());
                             }).build();
                     return chain.filter(exchange.mutate().request(mutatedRequest).build());
                 })
