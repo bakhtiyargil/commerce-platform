@@ -1,16 +1,21 @@
 package az.baxtiyargil.commerce.gateway.configuration;
 
+import az.baxtiyargil.commerce.gateway.client.AuthClientExceptionHandler;
 import az.baxtiyargil.commerce.gateway.client.AuthServiceClient;
 import az.baxtiyargil.commerce.gateway.component.AuthenticationGatewayFilter;
 import az.baxtiyargil.commerce.gateway.component.ConditionalWebFilter;
+import az.baxtiyargil.commerce.gateway.component.ErrorResponseWriter;
+import az.baxtiyargil.commerce.gateway.configuration.properties.ApplicationProperties;
 import az.baxtiyargil.commerce.gateway.jwt.JwtLocalValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
@@ -24,11 +29,19 @@ public class SecurityConfiguration {
 
     private final JwtLocalValidator jwtLocalValidator;
     private final AuthServiceClient authServiceClient;
+    private final ErrorResponseWriter errorResponseWriter;
+    private final ApplicationProperties applicationProperties;
+    private final AuthClientExceptionHandler authClientExceptionHandler;
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        var publicMatcher = ServerWebExchangeMatchers.pathMatchers(PUBLIC_PATHS);
-        var gatewayFilter = new AuthenticationGatewayFilter(jwtLocalValidator, authServiceClient);
+        var publicMatcher = ServerWebExchangeMatchers.pathMatchers(applicationProperties.getIgnorePaths());
+        var gatewayFilterDelegate = new AuthenticationGatewayFilter(
+                jwtLocalValidator,
+                authServiceClient,
+                errorResponseWriter,
+                authClientExceptionHandler
+        );
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
@@ -39,31 +52,24 @@ public class SecurityConfiguration {
                         .anyExchange().authenticated()
                 )
                 .addFilterBefore(
-                        new ConditionalWebFilter(gatewayFilter, publicMatcher),
+                        new ConditionalWebFilter(gatewayFilterDelegate, publicMatcher),
                         SecurityWebFiltersOrder.AUTHENTICATION
                 )
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint((exchange, e) -> unauthorized(exchange))
-                        .accessDeniedHandler((exchange, e) -> forbidden(exchange))
+                        .authenticationEntryPoint(this::handleAuthenticationException)
+                        .accessDeniedHandler(this::handleAccessDeniedException)
                 )
                 .build();
     }
 
-    private static final String[] PUBLIC_PATHS = {
-            "/api/v1/auth/login",
-            "/api/v1/auth/register",
-            "/api/v1/auth/refresh",
-            "/actuator/**"
-    };
-
-    private Mono<Void> unauthorized(ServerWebExchange exchange) {
-        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-        return exchange.getResponse().setComplete();
+    private Mono<Void> handleAuthenticationException(ServerWebExchange exchange,
+                                                     AuthenticationException e) {
+        return errorResponseWriter.write(exchange, HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
-    private Mono<Void> forbidden(ServerWebExchange exchange) {
-        exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
-        return exchange.getResponse().setComplete();
+    private Mono<Void> handleAccessDeniedException(ServerWebExchange exchange,
+                                                   AccessDeniedException e) {
+        return errorResponseWriter.write(exchange, HttpStatus.FORBIDDEN, e.getMessage());
     }
 }

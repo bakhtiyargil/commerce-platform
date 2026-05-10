@@ -69,3 +69,10 @@ client:
     url: http://localhost:8075
     path: /v1/auth/internal/context
     api-key: ${API_KEY}
+
+application:
+  ignore-paths:
+    - "/api/v1/auth/login"
+    - "/api/v1/auth/register"
+    - "/api/v1/auth/refresh"
+    - "/actuator/**"

@@ -42,7 +42,6 @@ public class SecurityExceptionHandler {
         sendErrorResponse(
                 response,
                 HttpStatus.FORBIDDEN,
-                "ACCESS_DENIED",
                 exception.getMessage(),
                 request.getRequestURI(),
                 correlationId
@@ -63,7 +62,6 @@ public class SecurityExceptionHandler {
         sendErrorResponse(
                 response,
                 HttpStatus.UNAUTHORIZED,
-                "UNAUTHORIZED",
                 exception.getMessage(),
                 request.getRequestURI(),
                 correlationId
@@ -72,7 +70,6 @@ public class SecurityExceptionHandler {
 
     private void sendErrorResponse(HttpServletResponse response,
                                    HttpStatus status,
-                                   String errorCode,
                                    String message,
                                    String path,
                                    String correlationId) throws IOException {
@@ -82,7 +79,7 @@ public class SecurityExceptionHandler {
 
         Map<String, Object> errorBody = new HashMap<>();
         errorBody.put("id", correlationId);
-        errorBody.put("code", errorCode);
+        errorBody.put("code", status.name());
         errorBody.put("message", message);
         errorBody.put("status", status.value());
         errorBody.put("timestamp", Instant.now().toString());
