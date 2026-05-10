@@ -1,7 +1,7 @@
 package az.baxtiyargil.commerce.gateway.configuration;
 
-import az.baxtiyargil.commerce.gateway.component.AuthClientProperties;
-import az.baxtiyargil.commerce.gateway.component.SecurityProperties;
+import az.baxtiyargil.commerce.gateway.configuration.properties.AuthClientProperties;
+import az.baxtiyargil.commerce.gateway.configuration.properties.SecurityProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 

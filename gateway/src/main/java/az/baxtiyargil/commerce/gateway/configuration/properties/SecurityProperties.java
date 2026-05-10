@@ -1,4 +1,4 @@
-package az.baxtiyargil.commerce.gateway.component;
+package az.baxtiyargil.commerce.gateway.configuration.properties;
 
 import lombok.AccessLevel;
 import lombok.Getter;

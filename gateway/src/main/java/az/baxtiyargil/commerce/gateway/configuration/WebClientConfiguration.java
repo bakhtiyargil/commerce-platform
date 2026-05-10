@@ -1,6 +1,6 @@
 package az.baxtiyargil.commerce.gateway.configuration;
 
-import az.baxtiyargil.commerce.gateway.component.AuthClientProperties;
+import az.baxtiyargil.commerce.gateway.configuration.properties.AuthClientProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

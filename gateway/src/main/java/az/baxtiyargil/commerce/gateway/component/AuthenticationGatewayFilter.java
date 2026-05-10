@@ -9,12 +9,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
-
 import java.text.ParseException;
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ public class AuthenticationGatewayFilter implements WebFilter {
     private final AuthServiceClient authServiceClient;
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+    public @NonNull Mono<Void> filter(@NonNull ServerWebExchange exchange, @NonNull WebFilterChain chain) {
         var token = extractToken(exchange.getRequest());
         if (token == null) {
             return unauthorized(exchange, "Missing or invalid Authorization header");

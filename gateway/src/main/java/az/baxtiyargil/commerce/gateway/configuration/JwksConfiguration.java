@@ -1,6 +1,6 @@
 package az.baxtiyargil.commerce.gateway.configuration;
 
-import az.baxtiyargil.commerce.gateway.component.SecurityProperties;
+import az.baxtiyargil.commerce.gateway.configuration.properties.SecurityProperties;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.jwk.source.JWKSourceBuilder;
 import com.nimbusds.jose.proc.SecurityContext;
